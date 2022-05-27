@@ -29,10 +29,11 @@ public class DemoApplication {
         return args -> {
             appUserService.saveRole(new Role(null, "ROLE_USER"));
             appUserService.saveRole(new Role(null, "ROLE_ADMIN"));
-            appUserService.saveAppUser(new AppUser(null, "Gabi", "Lesn", "gabi@mail.com", "pass", new ArrayList<Role>()));
-            appUserService.saveAppUser(new AppUser(null, "Gabi", "Lesn4", "gabi4@mail.com", "pass", new ArrayList<Role>()));
+            appUserService.saveAppUser(new AppUser(null, "Gabi", "Lesn", "gabi@mail.com", "pass", new ArrayList<>()));
+            appUserService.saveAppUser(new AppUser(null, "Gabi", "Lesn4", "gabi4@mail.com", "pass", new ArrayList<>()));
             appUserService.addRoleToAppUser("gabi@mail.com", "ROLE_USER");
             appUserService.addRoleToAppUser("gabi4@mail.com", "ROLE_ADMIN");
+            appUserService.addRoleToAppUser("gabi4@mail.com", "ROLE_USER");
 
         };
 
