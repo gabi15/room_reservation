@@ -63,7 +63,12 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
 
     @Override
     public AppUser getAppUser(String email){
-        return null;
+        Optional<AppUser> appUser = appUserRepository.findUserByEmail(email);
+        if(appUser.isEmpty()){
+            log.error("User not found in database");
+            throw new UsernameNotFoundException("User not found in database");
+        }
+        return appUser.get();
     }
 
 

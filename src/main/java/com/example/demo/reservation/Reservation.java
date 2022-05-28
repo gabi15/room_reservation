@@ -1,6 +1,8 @@
 package com.example.demo.reservation;
 
+import com.example.demo.appuser.AppUser;
 import com.example.demo.room.Room;
+import com.example.demo.utils.DateHandler;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,20 +20,32 @@ public class Reservation {
     @Id
     @GeneratedValue(strategy = AUTO)
     private Long id;
-    private String name;
-    private Date startDate;
-    private Date endDate;
+    private Timestamp startDate;
+    private Timestamp endDate;
     private Timestamp creationDate;
 
     @ManyToOne
     private Room room;
 
-    public Reservation(Long id, String name, Date startDate, Date endDate) {
+    @ManyToOne
+    private AppUser appUser;
+
+    public Reservation(Long id, Date startDate, Date endDate, Room room, AppUser appUser) {
         java.util.Date utilDate = new java.util.Date();
         this.id = id;
-        this.name = name;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.startDate = new Timestamp(startDate.getTime());
+        this.endDate = new Timestamp(endDate.getTime());
         this.creationDate = new Timestamp(utilDate.getTime());
+        this.room = room;
+        this.appUser = appUser;
+    }
+
+    public Reservation(String startDate, String endDate, Room room, AppUser appUser){
+        java.util.Date utilDate = new java.util.Date();
+        this.startDate = new Timestamp(DateHandler.handleDate(startDate).getTime());
+        this.endDate = new Timestamp(DateHandler.handleDate(endDate).getTime());
+        this.creationDate = new Timestamp(utilDate.getTime());
+        this.room = room;
+        this.appUser = appUser;
     }
 }
