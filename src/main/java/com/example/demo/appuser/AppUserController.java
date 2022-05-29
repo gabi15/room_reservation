@@ -28,6 +28,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RestController
 @RequestMapping(path = "api/v1")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class AppUserController {
 
     private final AppUserServiceImpl appUserServiceImpl;
