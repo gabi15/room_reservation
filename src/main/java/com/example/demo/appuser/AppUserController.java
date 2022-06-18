@@ -4,7 +4,9 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.example.demo.utils.AuthHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -43,28 +45,45 @@ public class AppUserController {
         return ResponseEntity.ok().body(appUserServiceImpl.getUsers());
     }
 
+    @GetMapping("/user/get")
+    public ResponseEntity<UserWithoutPassword> getUser(HttpServletRequest request) {
+        String email = AuthHandler.getCurrentUserEmail(request.getHeader(AUTHORIZATION));
+        AppUser appUser = appUserServiceImpl.getAppUser(email);
+        return ResponseEntity.ok().body(new UserWithoutPassword(appUser.getEmail(), appUser.getName(), appUser.getSurname()));
+
+    }
+
     @PostMapping("/user/save")
-    public ResponseEntity<AppUser> registerNewAppUser(@RequestBody AppUser appUser){
+    public ResponseEntity<String> registerNewAppUser(@RequestBody AppUser appUser) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/user/save").toUriString());
-        return ResponseEntity.created(uri).body(appUserServiceImpl.saveAppUser(appUser));
+        try {
+            appUserServiceImpl.saveAppUser(appUser);
+            appUserServiceImpl.addRoleToAppUser(appUser.getEmail(), "ROLE_USER");
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        return ResponseEntity.created(uri).body("success");
     }
 
     @PostMapping("/role/save")
-    public ResponseEntity<Role> saveRole(@RequestBody Role role){
+    public ResponseEntity<Role> saveRole(@RequestBody Role role) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/role/save").toUriString());
         return ResponseEntity.created(uri).body(appUserServiceImpl.saveRole(role));
     }
 
     @PostMapping("/role/addtouser")
-    public ResponseEntity<?> addRoleToUser(@RequestBody RoleToUserForm roleToUserForm){
-        appUserServiceImpl.addRoleToAppUser(roleToUserForm.getEmail(),roleToUserForm.getEmail());
+    public ResponseEntity<?> addRoleToUser(@RequestBody RoleToUserForm roleToUserForm) {
+        appUserServiceImpl.addRoleToAppUser(roleToUserForm.getEmail(), roleToUserForm.getEmail());
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/token/check") public ResponseEntity<?> checkToken(HttpServletRequest request) throws IOException{
+        return ResponseEntity.ok().build();
+    }
     @GetMapping("/token/refresh")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String authorizationHeader = request.getHeader(AUTHORIZATION);
-        if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             try {
                 String refresh_token = authorizationHeader.substring("Bearer ".length());
                 Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
@@ -83,26 +102,24 @@ public class AppUserController {
                 tokens.put("access_token", access_token);
                 tokens.put("refresh_token", refresh_token);
                 response.setContentType(APPLICATION_JSON_VALUE);
-                new ObjectMapper().writeValue(response.getOutputStream(),tokens);
+                new ObjectMapper().writeValue(response.getOutputStream(), tokens);
 
-            }
-            catch(Exception exception){
+            } catch (Exception exception) {
                 response.setHeader("error", exception.getMessage());
                 response.setStatus(FORBIDDEN.value());
                 //response.sendError(FORBIDDEN.value());
                 Map<String, String> error = new HashMap<>();
                 error.put("error_message", exception.getMessage());
                 response.setContentType(APPLICATION_JSON_VALUE);
-                new ObjectMapper().writeValue(response.getOutputStream(),error);
+                new ObjectMapper().writeValue(response.getOutputStream(), error);
             }
-        }
-        else{
+        } else {
             throw new RuntimeException("Refresh token is missing");
         }
     }
 
-    @DeleteMapping(path="{userId}")
-    public void deleteAppUser(@PathVariable("userId") Long id){
+    @DeleteMapping(path = "{userId}")
+    public void deleteAppUser(@PathVariable("userId") Long id) {
         appUserServiceImpl.deleteAppUser(id);
     }
 
@@ -110,7 +127,7 @@ public class AppUserController {
     public void updateAppUser(
             @PathVariable("userId") Long id,
             @RequestParam(required = false) String name,
-            @RequestParam(required = false) String email){
+            @RequestParam(required = false) String email) {
         appUserServiceImpl.updateAppUser(id, name, email);
 
     }
@@ -120,5 +137,13 @@ public class AppUserController {
 class RoleToUserForm {
     private String email;
     private String roleName;
+}
+
+@Data
+@AllArgsConstructor
+class UserWithoutPassword {
+    private String email;
+    private String name;
+    private String surname;
 }
 

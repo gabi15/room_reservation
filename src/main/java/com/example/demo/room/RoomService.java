@@ -16,7 +16,7 @@ public class RoomService {
     private final RoomRepository roomRepository;
 
     public Room saveRoom(RoomForm roomForm){
-        Room room = new Room(roomForm.getName(), roomForm.getStartDate(), roomForm.getEndDate());
+        Room room = new Room(roomForm.getName(), roomForm.getStartDate(), roomForm.getEndDate(), roomForm.getReservationTimeInMinutes());
         Optional<Room> roomByName = roomRepository.findByName(room.getName());
         if( roomByName.isPresent()){
             throw new IllegalStateException("Room name taken");
@@ -36,5 +36,13 @@ public class RoomService {
             throw new IllegalStateException("No such room");
         }
         return roomByName.get();
+    }
+
+    public Room editRoom(RoomForm roomForm) {
+        Room room = getRoomByName(roomForm.getName());
+        room.setName(roomForm.getName());
+        room.setReservationTimeInMinutes(roomForm.getReservationTimeInMinutes());
+        //room.setStartDateTime(roomForm.getStartDate());
+        return room;
     }
 }

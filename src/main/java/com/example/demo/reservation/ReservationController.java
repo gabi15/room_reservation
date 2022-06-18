@@ -1,14 +1,11 @@
 package com.example.demo.reservation;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.DecodedJWT;
-import com.example.demo.appuser.AppUser;
 import com.example.demo.appuser.AppUserServiceImpl;
+import com.example.demo.utils.AuthHandler;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -29,21 +26,26 @@ public class ReservationController {
 
     @PostMapping("reservation/save")
     public ResponseEntity<Reservation> saveReservation(HttpServletRequest request, @RequestBody ReservationForm reservationForm){
-        String authorizationHeader = request.getHeader(AUTHORIZATION);
+        String email = AuthHandler.getCurrentUserEmail(request.getHeader(AUTHORIZATION));
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/reservation/save").toUriString());
-        String refresh_token = authorizationHeader.substring("Bearer ".length());
-        Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
-        JWTVerifier verifier = JWT.require(algorithm).build();
-        DecodedJWT decodedJWT = verifier.verify(refresh_token);
-        String email = decodedJWT.getSubject();
-        log.info("the email is {}",email);
-        AppUser user = appUserServiceImpl.getAppUser(email);
-        return ResponseEntity.created(uri).body(reservationService.saveReservation(reservationForm, user));
+        return ResponseEntity.created(uri).body(reservationService.saveReservation(reservationForm, email));
     }
 
     @GetMapping("reservations")
     public ResponseEntity<List<Reservation>> getReservations(){
         return ResponseEntity.ok().body(reservationService.getReservations());
+    }
+
+    @DeleteMapping(value = "/reservations/{id}")
+    public ResponseEntity<String> deleteReservation(@PathVariable Long id) {
+
+        boolean isRemoved = reservationService.deleteReservation(id);
+
+        if (!isRemoved) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>("successfully deleted", HttpStatus.OK);
     }
 }
 

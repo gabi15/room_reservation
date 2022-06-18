@@ -13,8 +13,14 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
-@Service @RequiredArgsConstructor @Transactional @Slf4j
+@Service
+@RequiredArgsConstructor
+@Transactional
+@Slf4j
 public class AppUserServiceImpl implements AppUserService, UserDetailsService {
 
     private final AppUserRepository appUserRepository;
@@ -36,12 +42,23 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
     }
 
     @Override
-    public AppUser saveAppUser(AppUser appUser){
+    public AppUser saveAppUser(AppUser appUser) {
+        //todo add roles
+        String regexPattern = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
+        Pattern pattern = Pattern.compile(regexPattern);
+        Matcher matcher = pattern.matcher(appUser.getEmail());
+        if (Stream.of(appUser.getName(), appUser.getEmail(), appUser.getPassword(), appUser.getSurname())
+                        .anyMatch(str-> str == null || str.isEmpty())) {
+            throw new IllegalStateException("All fields must be filled");
+        }
+        if (!matcher.matches()) {
+            throw new IllegalStateException("Email does not match pattern");
+        }
         Optional<AppUser> userByEmail = appUserRepository.findUserByEmail(appUser.getEmail());
-        if( userByEmail.isPresent()){
+        if (userByEmail.isPresent()) {
             throw new IllegalStateException("Email taken");
         }
-        log.info("Saving new user {} to the database",  appUser.getEmail());
+        log.info("Saving new user {} to the database", appUser.getEmail());
         appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
         appUserRepository.save(appUser);
         return appUser;
@@ -62,9 +79,9 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
     }
 
     @Override
-    public AppUser getAppUser(String email){
+    public AppUser getAppUser(String email) {
         Optional<AppUser> appUser = appUserRepository.findUserByEmail(email);
-        if(appUser.isEmpty()){
+        if (appUser.isEmpty()) {
             log.error("User not found in database");
             throw new UsernameNotFoundException("User not found in database");
         }
@@ -72,11 +89,11 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
     }
 
 
-    public void deleteAppUser(Long id){
+    public void deleteAppUser(Long id) {
         boolean exists = appUserRepository.existsById(id);
-        if(!exists){
+        if (!exists) {
             throw new IllegalStateException(
-                    "user with id " +id + " does not exist"
+                    "user with id " + id + " does not exist"
             );
         }
         appUserRepository.deleteById(id);
@@ -86,16 +103,16 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
     @Transactional
     public void updateAppUser(Long id, String name, String email) {
         AppUser user = appUserRepository.findById(id)
-                .orElseThrow(()-> new IllegalStateException(
-                        "student with id "+ id  +"does not exist"
+                .orElseThrow(() -> new IllegalStateException(
+                        "student with id " + id + "does not exist"
                 ));
 
-        if(name != null && name.length()>0 && !Objects.equals(user.getName(), name)){
+        if (name != null && name.length() > 0 && !Objects.equals(user.getName(), name)) {
             user.setName(name);
         }
-        if(email != null && email.length()>0 && !Objects.equals(user.getEmail(), email)){
+        if (email != null && email.length() > 0 && !Objects.equals(user.getEmail(), email)) {
             Optional<AppUser> userByEmail = appUserRepository.findUserByEmail(user.getEmail());
-            if( userByEmail.isPresent()){
+            if (userByEmail.isPresent()) {
                 throw new IllegalStateException("Email taken");
             }
             user.setName(name);
@@ -105,13 +122,14 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<AppUser> appUser = appUserRepository.findUserByEmail(email);
-        if(appUser.isEmpty()){
+        if (appUser.isEmpty()) {
             log.error("User not found in database");
             throw new UsernameNotFoundException("User not found in database");
         }
         AppUser user = appUser.get();
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        user.getRoles().forEach(role ->{authorities.add(new SimpleGrantedAuthority(role.getName()));
+        user.getRoles().forEach(role -> {
+            authorities.add(new SimpleGrantedAuthority(role.getName()));
         });
         return new User(user.getEmail(), user.getPassword(), authorities);
     }

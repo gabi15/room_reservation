@@ -26,9 +26,12 @@ public class Room {
     private Timestamp startDateTime;
     private Timestamp endDateTime;
 
-    public Room(String name, String startDateTime, String endDateTime) {
+    private int reservationTimeInMinutes;
+
+    public Room(String name, String startDateTime, String endDateTime, int minutes) {
         this.name = name;
         this.startDateTime = new Timestamp(DateHandler.handleDate(startDateTime).getTime());
         this.endDateTime = new Timestamp(DateHandler.handleDate(endDateTime).getTime());
+        this.reservationTimeInMinutes = minutes;
     }
 }

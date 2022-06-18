@@ -1,6 +1,5 @@
 package com.example.demo.room;
 
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,16 +21,15 @@ public class RoomController {
         return ResponseEntity.created(uri).body(roomService.saveRoom(roomForm));
     }
 
+    @PutMapping("/room/edit")
+    public ResponseEntity<Room> editRoom(@RequestBody RoomForm roomForm){
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/room/edit").toUriString());
+        return ResponseEntity.created(uri).body(roomService.editRoom(roomForm));
+    }
+
     @GetMapping("/rooms")
     public ResponseEntity<List<Room>> getRooms(){
         return ResponseEntity.ok().body(roomService.getRooms());
     }
-}
-
-@Data
-class RoomForm {
-    private String name;
-    private String startDate;
-    private String endDate;
 }
 
