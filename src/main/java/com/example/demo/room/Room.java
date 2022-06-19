@@ -1,6 +1,5 @@
 package com.example.demo.room;
 
-import com.example.demo.utils.DateHandler;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.sql.Timestamp;
+import java.sql.Time;
 
 import static javax.persistence.GenerationType.AUTO;
 
@@ -23,15 +22,15 @@ public class Room {
     @GeneratedValue(strategy = AUTO)
     private Long id;
     private String name;
-    private Timestamp startDateTime;
-    private Timestamp endDateTime;
+    private Time startTime;
+    private Time endTime;
 
     private int reservationTimeInMinutes;
 
-    public Room(String name, String startDateTime, String endDateTime, int minutes) {
+    public Room(String name, String startTime, String endTime, int minutes) {
         this.name = name;
-        this.startDateTime = new Timestamp(DateHandler.handleDate(startDateTime).getTime());
-        this.endDateTime = new Timestamp(DateHandler.handleDate(endDateTime).getTime());
+        this.startTime = Time.valueOf(startTime);
+        this.endTime = Time.valueOf(endTime);
         this.reservationTimeInMinutes = minutes;
     }
 }

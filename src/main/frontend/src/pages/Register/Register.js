@@ -3,6 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import './Register.css';
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 function Register() {
 
@@ -10,6 +11,7 @@ function Register() {
   const passwordRef = useRef();
   const nameRef = useRef();
   const surnameRef = useRef();
+  const nav = useNavigate();
 
   const validateEmail = (email) => {
     const regEmail = /^(([^<>()\\[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -51,9 +53,9 @@ function Register() {
       password: password
     }).then(res => {
       console.log(res);
-      const form = document.getElementById('register_form');
-      form.reset();
-      alert("dzien dobry");
+      // const form = document.getElementById('register_form');
+      // form.reset();
+      nav("/login")
     }).catch(error => {
       console.log(error.response.data);
       alert("Niepoprawne dane: " + error.response.data);

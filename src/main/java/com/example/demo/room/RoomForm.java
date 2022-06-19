@@ -8,7 +8,7 @@ import lombok.Data;
 public
 class RoomForm {
     private String name;
-    private String startDate;
-    private String endDate;
+    private String startTime;
+    private String endTime;
     private int reservationTimeInMinutes;
 }

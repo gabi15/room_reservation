@@ -1,10 +1,12 @@
 package com.example.demo.room;
 
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,7 +18,7 @@ public class RoomService {
     private final RoomRepository roomRepository;
 
     public Room saveRoom(RoomForm roomForm){
-        Room room = new Room(roomForm.getName(), roomForm.getStartDate(), roomForm.getEndDate(), roomForm.getReservationTimeInMinutes());
+        Room room = new Room(roomForm.getName(), roomForm.getStartTime(), roomForm.getEndTime(), roomForm.getReservationTimeInMinutes());
         Optional<Room> roomByName = roomRepository.findByName(room.getName());
         if( roomByName.isPresent()){
             throw new IllegalStateException("Room name taken");
@@ -44,5 +46,30 @@ public class RoomService {
         room.setReservationTimeInMinutes(roomForm.getReservationTimeInMinutes());
         //room.setStartDateTime(roomForm.getStartDate());
         return room;
+    }
+
+    public List<StartEnd> getRoomsTimeSlots(String roomName){
+        Room room = getRoomByName(roomName);
+        LocalTime start = room.getStartTime().toLocalTime();
+        LocalTime end = room.getEndTime().toLocalTime();
+        int minutes = room.getReservationTimeInMinutes();
+        ArrayList<StartEnd> slots = new ArrayList<StartEnd>();
+        while(start.compareTo(end) < 0 ){
+            StartEnd startEnd = new StartEnd();
+            startEnd.setStart(start.toString());
+            start = start.plusMinutes(minutes);
+            startEnd.setEnd(start.toString());
+            slots.add(startEnd);
+        }
+        return slots;
+
+    }
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    class StartEnd{
+        String start;
+        String end;
     }
 }

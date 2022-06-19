@@ -7,7 +7,8 @@ import {Routes, Route} from 'react-router-dom';
 import Layout from './components/Layout/Layout';
 import Register from './pages/Register/Register';
 import Login from './pages/Login/Login';
-
+import Reservations from './pages/Reservations/Reservations'
+import RoomSlots from './pages/RoomSlots/RoomSlots'
 
 
 function App() {
@@ -20,7 +21,9 @@ function App() {
       <Route exact path="/" element={<p>default</p>}/>
       <Route exact path="/register" element={<Register/>}/>
       <Route exact path="/logout"/>
-      <Route exact path="/login" element={<Login/>}/>
+      <Route exact path="/reservations" element={<Reservations/>}/>
+      <Route exact path="/login/" element={<Login/>}/>
+      <Route exact path="/room/:name" element={<RoomSlots/>}/>
     </Routes>
   )
 

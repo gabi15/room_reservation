@@ -2,18 +2,18 @@ import axios from 'axios';
 import { authHeader } from '../../DataService';
 import Navigation from './../../components/Navigation/Navigation';
 import React, { useState, useEffect, useRef } from 'react';
-import './UserAccount.css';
 import Table from 'react-bootstrap/Table'
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 
-const UserAccount = () => {
+const RoomSlots = () => {
     const [userData, setUserData] = useState({
         name: "",
         surname: "",
         email: ""
     });
     const nav = useNavigate();
+    const { name } = useParams();
 
 
 
@@ -22,8 +22,10 @@ const UserAccount = () => {
 
             const authHeaderData = authHeader() || null;
             console.log(authHeaderData);
+            console.log("name");
+            console.log(name)
 
-            axios.get("http://localhost:8080/api/v1/user/get", { headers: authHeaderData })
+            axios.get(`http://localhost:8080/api/v1/room/${name}`, { headers: authHeaderData })
 
                 .then(res => {
                     console.log(res);
@@ -43,20 +45,10 @@ const UserAccount = () => {
     }, []);
 
     return (
-        <div className="UserAccount">
+        <div className="RoomSlots">
             <h1>Witaj {userData.name}</h1>
-            <div className="user_data">
-                <h3>Twoje dane</h3>
-                <Table striped bordered hover>
-                    <tbody>
-                        <tr><th>Email</th><td>{userData.email}</td></tr>
-                        <tr><th>Imię</th><td>{userData.name}</td></tr>
-                        <tr><th>Nazwisko</th><td>{userData.surname}</td></tr>
-                    </tbody>
-                </Table>
-            </div>
         </div>
     );
 }
 
-export default UserAccount;
+export default RoomSlots;

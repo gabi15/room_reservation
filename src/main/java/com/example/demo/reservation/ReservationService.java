@@ -27,7 +27,6 @@ public class ReservationService {
         Reservation reservation = new Reservation(reservationForm.getStartDate(), reservationForm.getEndDate(), room, appUser);
         reservationRepository.save(reservation);
         return reservation;
-
     }
 
     public List<Reservation> getReservations() {
