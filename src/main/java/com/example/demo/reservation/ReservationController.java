@@ -31,6 +31,11 @@ public class ReservationController {
         return ResponseEntity.created(uri).body(reservationService.saveReservation(reservationForm, email));
     }
 
+    @GetMapping("/reservations/{name}")
+    public ResponseEntity<List<Reservation>> getRoomReservations(@PathVariable String name) {
+        return ResponseEntity.ok().body(reservationService.getRoomReservations(name));
+    }
+
     @GetMapping("reservations")
     public ResponseEntity<List<Reservation>> getReservations(){
         return ResponseEntity.ok().body(reservationService.getReservations());

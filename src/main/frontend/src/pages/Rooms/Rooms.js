@@ -1,31 +1,36 @@
 import axios from 'axios';
 import { authHeader } from '../../DataService';
-import Navigation from './../../components/Navigation/Navigation';
+import Navigation from '../../components/Navigation/Navigation';
 import React, { useState, useEffect, useRef } from 'react';
 import Table from 'react-bootstrap/Table'
 import { useNavigate } from "react-router-dom";
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import ListGroup from 'react-bootstrap/ListGroup'
+import { Button } from 'react-bootstrap';
+import './Rooms.css'
 
 
-const Reservations = () => {
+const Rooms = () => {
     const [rooms, setRooms] = useState([]);
     const nav = useNavigate();
     // let displayedRooms;
 
     const displayRooms = (roomsToDisplay) => {
         return (
-            <ol>
-                {roomsToDisplay.map((room, index) => (
-                    <Link to={`/room/${room}`} key={`${index}_${room}`}> {room} </Link>
+            <div className= "room_list">
+            <ListGroup as="ul">
+                         {roomsToDisplay.map((room, index) => (
+                    <ListGroup.Item as={Link} to={`/room/${room}`} key={`${index}_${room}`}> {room} </ListGroup.Item >
                 ))}
-            </ol>
+            </ListGroup>
+            </div>
         );
     }
 
 
 
     useEffect(() => {
-        const fetchReservations = () => {
+        const fetchRooms = () => {
 
             const authHeaderData = authHeader();
             console.log(authHeaderData);
@@ -48,26 +53,15 @@ const Reservations = () => {
 
         }
 
-        fetchReservations();
+        fetchRooms();
     }, []);
 
     return (
-        <div className="Reservations">
-            <div><h1>Witaj </h1></div>
+        <div className="Rooms">
+            <div><h1>Lista sali dostępnych do rezerwacji</h1></div>
             {displayRooms(rooms)}
-            {/* <p>{rooms}</p> */}
-            {/* <div className="user_data">
-                <h3>Twoje dane</h3>
-                <Table striped bordered hover>
-                    <tbody>
-                        <tr><th>Email</th><td>{userData.email}</td></tr>
-                        <tr><th>Imię</th><td>{userData.name}</td></tr>
-                        <tr><th>Nazwisko</th><td>{userData.surname}</td></tr>
-                    </tbody>
-                </Table>
-            </div> */}
         </div>
     );
 }
 
-export default Reservations;
+export default Rooms;

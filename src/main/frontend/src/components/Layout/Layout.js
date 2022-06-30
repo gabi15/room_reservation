@@ -10,7 +10,7 @@ const Layout = (props) => {
             <Nav.Link as={Link} to="/">Strona Główna</Nav.Link>
             <Nav.Link as={Link} to="/register">Zarejestruj się</Nav.Link>
             <Nav.Link as={Link} to="/user_account">Moje Dane</Nav.Link>
-            <Nav.Link as={Link} to="/reservations">Zarezerwuj</Nav.Link>
+            <Nav.Link as={Link} to="/rooms">Zarezerwuj</Nav.Link>
             <Nav.Link as={Link} to="/login">Zaloguj sie</Nav.Link>
             <Nav.Link href="/login" onClick={() => AuthenticationService.logout()}>Wyloguj się</Nav.Link>
         </Nav>

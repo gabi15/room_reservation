@@ -47,7 +47,10 @@ public class DemoApplication {
             appUserService.addRoleToAppUser("gabi@mail.com", "ROLE_USER");
             appUserService.addRoleToAppUser("gabi4@mail.com", "ROLE_ADMIN");
             appUserService.addRoleToAppUser("gabi4@mail.com", "ROLE_USER");
-            roomService.saveRoom(new RoomForm("salka wspinaczkowa", "06:00:00", "22:30:00", 60));
+            roomService.saveRoom(new RoomForm("salka wspinaczkowa", "06:00:00", "22:30:00", 30));
+            roomService.saveRoom(new RoomForm("salka telewizyjna ", "06:00:00", "24:00:00", 120));
+            roomService.saveRoom(new RoomForm("tenis stołowy", "06:00:00", "22:30:00", 60));
+            roomService.saveRoom(new RoomForm("bilard", "08:00:00", "23:00:00", 60));
         };
 
     }
