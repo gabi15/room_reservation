@@ -1,14 +1,14 @@
 package com.example.demo.room;
 
+import com.example.demo.reservation.Reservation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.sql.Time;
+import java.util.ArrayList;
+import java.util.List;
 
 import static javax.persistence.GenerationType.AUTO;
 
@@ -27,10 +27,19 @@ public class Room {
 
     private int reservationTimeInMinutes;
 
+    @OneToMany(mappedBy = "room",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<Reservation> reservationList = new ArrayList<>();
+
     public Room(String name, String startTime, String endTime, int minutes) {
         this.name = name;
         this.startTime = Time.valueOf(startTime);
         this.endTime = Time.valueOf(endTime);
         this.reservationTimeInMinutes = minutes;
+    }
+
+    public void addReservation(Reservation reservation){
+        reservationList.add(reservation);
     }
 }

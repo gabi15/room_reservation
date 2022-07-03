@@ -1,5 +1,6 @@
 package com.example.demo.room;
 
+import com.example.demo.reservation.Reservation;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -64,6 +65,13 @@ public class RoomService {
         return slots;
 
     }
+
+    public List<Reservation> getRoomReservations(String roomName) {
+        Room room = getRoomByName(roomName);
+        return room.getReservationList();
+
+    }
+
     @Getter
     @Setter
     @AllArgsConstructor

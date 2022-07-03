@@ -1,11 +1,13 @@
 package com.example.demo.appuser;
 
+import com.example.demo.reservation.Reservation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import static javax.persistence.FetchType.EAGER;
 
@@ -27,6 +29,11 @@ public class AppUser {
 
     @ManyToMany(fetch = EAGER)
     private Collection<Role> roles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "appUser",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<Reservation> reservationList = new ArrayList<>();
 
     public AppUser(){
 

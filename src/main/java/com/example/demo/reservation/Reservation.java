@@ -25,9 +25,11 @@ public class Reservation {
     private Timestamp creationDate;
 
     @ManyToOne
+    @JoinColumn(name="reservation_id")
     private Room room;
 
     @ManyToOne
+    @JoinColumn(name="user_id")
     private AppUser appUser;
 
     public Reservation(Long id, Date startDate, Date endDate, Room room, AppUser appUser) {

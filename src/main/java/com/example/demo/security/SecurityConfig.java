@@ -39,11 +39,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //Order is important
         http.authorizeRequests().antMatchers(GET, "/api/v1/login/**").permitAll();
         http.authorizeRequests().antMatchers(POST, "/api/v1/user/save").permitAll();
-        //http.authorizeRequests().antMatchers(POST, "/api/v1/reservation/save").hasAnyAuthority("ROLE_USER");
-        http.authorizeRequests().antMatchers(GET, "/api/v1/user/get").hasAnyAuthority("ROLE_USER");
-        http.authorizeRequests().antMatchers(GET, "/api/v1/users/").hasAnyAuthority("ADMIN_USER");
-        http.authorizeRequests().anyRequest().authenticated();
-        //http.authorizeRequests().anyRequest().permitAll();
+//        //http.authorizeRequests().antMatchers(POST, "/api/v1/reservation/save").hasAnyAuthority("ROLE_USER");
+//        http.authorizeRequests().antMatchers(GET, "/api/v1/user/get").hasAnyAuthority("ROLE_USER");
+//        http.authorizeRequests().antMatchers(GET, "/api/v1/users/").hasAnyAuthority("ADMIN_USER");
+//        http.authorizeRequests().anyRequest().authenticated();
+        http.authorizeRequests().anyRequest().permitAll();
         http.addFilter(customAuthenticationFilter);
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
         http.httpBasic();

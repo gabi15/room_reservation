@@ -25,10 +25,11 @@ public class ReservationController {
     private final AppUserServiceImpl appUserServiceImpl;
 
     @PostMapping("reservation/save")
-    public ResponseEntity<Reservation> saveReservation(HttpServletRequest request, @RequestBody ReservationForm reservationForm){
+    public ResponseEntity<String> saveReservation(HttpServletRequest request, @RequestBody ReservationForm reservationForm){
         String email = AuthHandler.getCurrentUserEmail(request.getHeader(AUTHORIZATION));
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/reservation/save").toUriString());
-        return ResponseEntity.created(uri).body(reservationService.saveReservation(reservationForm, email));
+        reservationService.saveReservation(reservationForm, email);
+        return ResponseEntity.created(uri).body("created successfully");
     }
 
     @GetMapping("/reservations/{name}")

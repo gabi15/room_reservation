@@ -1,5 +1,6 @@
 package com.example.demo.room;
 
+import com.example.demo.reservation.Reservation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +36,11 @@ public class RoomController {
     @GetMapping("/room/{name}")
     public ResponseEntity<List<RoomService.StartEnd>> getSlots(@PathVariable String name) {
         return ResponseEntity.ok().body(roomService.getRoomsTimeSlots(name));
+    }
+
+    @GetMapping("/room_reservations/{name}")
+    public ResponseEntity<List<Reservation>> getRoomReservations(@PathVariable String name) {
+        return ResponseEntity.ok().body(roomService.getRoomReservations(name));
     }
 }
 
