@@ -3,7 +3,6 @@ package com.example.demo.reservation;
 import com.example.demo.appuser.AppUser;
 import com.example.demo.appuser.AppUserServiceImpl;
 import com.example.demo.room.Room;
-import com.example.demo.room.RoomRepository;
 import com.example.demo.room.RoomService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +28,7 @@ public class ReservationService {
         Reservation reservation = new Reservation(reservationForm.getStartDate(), reservationForm.getEndDate(), room, appUser);
         reservationRepository.save(reservation);
         room.addReservation(reservation);
+        appUser.getReservationList().add(reservation);
         return reservation;
     }
 
@@ -52,4 +52,10 @@ public class ReservationService {
         List<Reservation> reservations = new ArrayList<>();
         return reservations;
     }
+
+    public List<Reservation> geUserReservations(String email) {
+        List<Reservation> reservations = appUserService.getReservationsByEmail(email);
+        return reservations;
+    }
+
 }

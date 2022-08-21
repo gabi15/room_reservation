@@ -1,5 +1,7 @@
 package com.example.demo.appuser;
 
+import com.example.demo.reservation.Reservation;
+
 import java.util.List;
 
 public interface AppUserService {
@@ -8,4 +10,8 @@ public interface AppUserService {
     void addRoleToAppUser(String email, String roleName);
     AppUser getAppUser(String email);
     List<AppUser> getUsers();
+
+    List<Reservation> getReservationsByEmail(String email);
+
+
 }

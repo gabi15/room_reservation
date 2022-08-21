@@ -1,6 +1,7 @@
 package com.example.demo.appuser;
 
 import com.example.demo.reservation.Reservation;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -30,6 +31,7 @@ public class AppUser {
     @ManyToMany(fetch = EAGER)
     private Collection<Role> roles = new ArrayList<>();
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "appUser",
             cascade = CascadeType.ALL,
             orphanRemoval = true)

@@ -1,6 +1,7 @@
 package com.example.demo.appuser;
 
 
+import com.example.demo.reservation.Reservation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -132,5 +133,11 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
             authorities.add(new SimpleGrantedAuthority(role.getName()));
         });
         return new User(user.getEmail(), user.getPassword(), authorities);
+    }
+
+    @Override
+    public List<Reservation> getReservationsByEmail(String email){
+        List<Reservation> reservations = appUserRepository.findReservationsByEmail(email);
+        return reservations;
     }
 }

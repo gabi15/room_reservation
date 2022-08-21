@@ -3,6 +3,7 @@ package com.example.demo.reservation;
 import com.example.demo.appuser.AppUser;
 import com.example.demo.room.Room;
 import com.example.demo.utils.DateHandler;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -24,10 +25,12 @@ public class Reservation {
     private Timestamp endDate;
     private Timestamp creationDate;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name="reservation_id")
     private Room room;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name="user_id")
     private AppUser appUser;

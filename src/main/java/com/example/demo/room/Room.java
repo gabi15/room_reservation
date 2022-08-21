@@ -1,6 +1,7 @@
 package com.example.demo.room;
 
 import com.example.demo.reservation.Reservation;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,6 +28,7 @@ public class Room {
 
     private int reservationTimeInMinutes;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "room",
             cascade = CascadeType.ALL,
             orphanRemoval = true)

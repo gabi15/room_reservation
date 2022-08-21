@@ -12,5 +12,4 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     @Override
     Optional<Reservation> findById(Long aLong);
 
-
 }

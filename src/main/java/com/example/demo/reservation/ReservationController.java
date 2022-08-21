@@ -37,6 +37,12 @@ public class ReservationController {
         return ResponseEntity.ok().body(reservationService.getRoomReservations(name));
     }
 
+    @GetMapping("/reservations/my_reservations")
+    public ResponseEntity<List<Reservation>> getUserReservations(HttpServletRequest request) {
+        String email = AuthHandler.getCurrentUserEmail(request.getHeader(AUTHORIZATION));
+        return ResponseEntity.ok().body(reservationService.geUserReservations(email));
+    }
+
     @GetMapping("reservations")
     public ResponseEntity<List<Reservation>> getReservations(){
         return ResponseEntity.ok().body(reservationService.getReservations());
