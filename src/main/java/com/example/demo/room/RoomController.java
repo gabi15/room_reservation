@@ -35,7 +35,7 @@ public class RoomController {
 
     @GetMapping("/room/{name}")
     public ResponseEntity<List<RoomService.StartEnd>> getSlots(@PathVariable String name) {
-        return ResponseEntity.ok().body(roomService.getRoomsTimeSlots(name));
+        return ResponseEntity.ok().body(roomService.getRoomsTimeSlotsForThreeDays(name));
     }
 
     @GetMapping("/room_reservations/{name}")

@@ -26,6 +26,10 @@ public class ReservationService {
         Room room = roomService.getRoomByName(reservationForm.getRoomName());
         AppUser appUser = appUserService.getAppUser(email);
         Reservation reservation = new Reservation(reservationForm.getStartDate(), reservationForm.getEndDate(), room, appUser);
+        boolean isSlotReserved = roomService.isSlotReserved(reservationForm.getRoomName(), reservation.getStartDate(), reservation.getEndDate());
+        if (isSlotReserved){
+            throw new IllegalArgumentException("already reserved");
+        }
         reservationRepository.save(reservation);
         room.addReservation(reservation);
         appUser.getReservationList().add(reservation);

@@ -1,7 +1,8 @@
 package com.example.demo.room;
 
 import com.example.demo.reservation.Reservation;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,9 @@ import static javax.persistence.GenerationType.AUTO;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Room {
     @Id
     @GeneratedValue(strategy = AUTO)
@@ -28,7 +32,7 @@ public class Room {
 
     private int reservationTimeInMinutes;
 
-    @JsonManagedReference
+    //@JsonManagedReference
     @OneToMany(mappedBy = "room",
             cascade = CascadeType.ALL,
             orphanRemoval = true)

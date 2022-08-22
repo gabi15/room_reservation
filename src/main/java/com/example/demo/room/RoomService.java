@@ -1,15 +1,18 @@
 package com.example.demo.room;
 
 import com.example.demo.reservation.Reservation;
+import com.example.demo.utils.DateHandler;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.sql.Timestamp;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -63,13 +66,42 @@ public class RoomService {
             slots.add(startEnd);
         }
         return slots;
+    }
 
+    public List<StartEnd> getRoomsTimeSlotsForDate(String roomName, String date){
+        List<StartEnd> allSlots = getRoomsTimeSlots(roomName);
+        for (StartEnd slot: allSlots){
+            String startDateString = date + " " + slot.getStart() +":00";
+            String endDateString = date + " " + slot.getEnd() +":00";
+
+            Timestamp startDate = new Timestamp(DateHandler.handleDate(startDateString).getTime());
+            Timestamp endDate = new Timestamp(DateHandler.handleDate(endDateString).getTime());
+            slot.setReserved(isSlotReserved(roomName, startDate, endDate));
+            slot.setDate(date);
+        }
+        return allSlots;
+    }
+
+    public List<StartEnd> getRoomsTimeSlotsForThreeDays(String roomName){
+        List<StartEnd> slots = new ArrayList<>();
+        for(int i=0; i<3; i++){
+            String date = DateHandler.getDate(i);
+            List<StartEnd> slotsForDate = getRoomsTimeSlotsForDate(roomName, date);
+            slots = Stream.concat(slots.stream(), slotsForDate.stream()).toList();
+        }
+        return slots;
     }
 
     public List<Reservation> getRoomReservations(String roomName) {
         Room room = getRoomByName(roomName);
         return room.getReservationList();
+    }
 
+    public boolean isSlotReserved(String roomName, Timestamp startDate, Timestamp endDate){
+        List<Reservation> reservations = getRoomReservations(roomName);
+        Stream<Reservation> stream = reservations.stream();
+        boolean isReserved = stream.anyMatch(reservation-> reservation.getStartDate().equals(startDate) && reservation.getEndDate().equals(endDate));
+        return isReserved;
     }
 
     @Getter
@@ -79,5 +111,7 @@ public class RoomService {
     class StartEnd{
         String start;
         String end;
+        boolean isReserved;
+        String date;
     }
 }

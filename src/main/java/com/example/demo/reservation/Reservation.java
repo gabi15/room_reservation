@@ -4,6 +4,8 @@ import com.example.demo.appuser.AppUser;
 import com.example.demo.room.Room;
 import com.example.demo.utils.DateHandler;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -17,6 +19,9 @@ import static javax.persistence.GenerationType.AUTO;
 @Table
 @Data
 @NoArgsConstructor
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Reservation {
     @Id
     @GeneratedValue(strategy = AUTO)
@@ -25,7 +30,7 @@ public class Reservation {
     private Timestamp endDate;
     private Timestamp creationDate;
 
-    @JsonBackReference
+    //@JsonBackReference
     @ManyToOne
     @JoinColumn(name="reservation_id")
     private Room room;
