@@ -33,6 +33,11 @@ public class RoomController {
         return ResponseEntity.ok().body(roomService.getRooms());
     }
 
+//    @GetMapping("/room/{name}")
+//    public ResponseEntity<List<List<RoomService.StartEnd>>> getSlots(@PathVariable String name) {
+//        return ResponseEntity.ok().body(roomService.getRoomsTimeSlotsForThreeDays(name));
+//    }
+
     @GetMapping("/room/{name}")
     public ResponseEntity<List<RoomService.StartEnd>> getSlots(@PathVariable String name) {
         return ResponseEntity.ok().body(roomService.getRoomsTimeSlotsForThreeDays(name));
