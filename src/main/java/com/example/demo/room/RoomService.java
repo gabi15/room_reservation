@@ -27,6 +27,9 @@ public class RoomService {
         if( roomByName.isPresent()){
             throw new IllegalStateException("Room name taken");
         }
+        if (roomForm.getStartTime().compareTo(roomForm.getEndTime()) >= 0) {
+            throw new IllegalStateException("Start before stop");
+        }
         log.info("Saving new room {} to the database", room.getName());
         roomRepository.save(room);
         return room;
@@ -58,7 +61,7 @@ public class RoomService {
         LocalTime end = room.getEndTime().toLocalTime();
         int minutes = room.getReservationTimeInMinutes();
         ArrayList<StartEnd> slots = new ArrayList<StartEnd>();
-        while(start.compareTo(end) < 0 ){
+        while(start.compareTo(end.plusMinutes(-minutes)) <= 0 ){
             StartEnd startEnd = new StartEnd();
             startEnd.setStart(start.toString());
             start = start.plusMinutes(minutes);

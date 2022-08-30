@@ -11,6 +11,7 @@ import Rooms from './pages/Rooms/Rooms';
 import RoomSlots from './pages/RoomSlots/RoomSlots';
 import MyReservations from './pages/MyReservations/MyReservations';
 import ReservationsAdmin from './pages/ReservationsAdmin/ReservationsAdmin';
+import AddRoom from './pages/AddRoom/AddRoom';
 
 
 
@@ -30,6 +31,8 @@ function App() {
       <Route exact path="/my_reservations/" element={<MyReservations/>}/>
 
       <Route exact path="/reservations_admin/" element={<ReservationsAdmin/>}/>
+      <Route exact path="/add_room/" element={<AddRoom/>}/>
+
     </Routes>
   )
 
