@@ -9,7 +9,7 @@ import java.util.Locale;
 
 public class DateHandler {
     public static Date handleDate(String date){
-        DateFormat df = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss", Locale.ENGLISH);
+        DateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);
         Date result;
         try{
             result = df.parse(date);

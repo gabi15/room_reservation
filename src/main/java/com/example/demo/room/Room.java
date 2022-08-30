@@ -1,8 +1,7 @@
 package com.example.demo.room;
 
 import com.example.demo.reservation.Reservation;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,9 +18,9 @@ import static javax.persistence.GenerationType.AUTO;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
+//@JsonIdentityInfo(
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id")
 public class Room {
     @Id
     @GeneratedValue(strategy = AUTO)
@@ -36,6 +35,8 @@ public class Room {
     @OneToMany(mappedBy = "room",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
+
+    @JsonIgnore
     private List<Reservation> reservationList = new ArrayList<>();
 
     public Room(String name, String startTime, String endTime, int minutes) {

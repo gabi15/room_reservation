@@ -56,7 +56,7 @@ function Login() {
 
   return (
     <div className="Login">
-      <h1>Zarejestruj się aby móc korzystać z szalonych możliwości logowania</h1>
+      <h1>Zaloguj się aby móc korzystać z szalonych możliwości logowania</h1>
 
       <div className="form_style">
 

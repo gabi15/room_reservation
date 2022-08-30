@@ -70,13 +70,14 @@ public class RoomService {
 
     public List<StartEnd> getRoomsTimeSlotsForDate(String roomName, String date){
         List<StartEnd> allSlots = getRoomsTimeSlots(roomName);
+        List<Reservation> reservations = getRoomReservations(roomName);
         for (StartEnd slot: allSlots){
             String startDateString = date + " " + slot.getStart() +":00";
             String endDateString = date + " " + slot.getEnd() +":00";
 
             Timestamp startDate = new Timestamp(DateHandler.handleDate(startDateString).getTime());
             Timestamp endDate = new Timestamp(DateHandler.handleDate(endDateString).getTime());
-            slot.setReserved(isSlotReserved(roomName, startDate, endDate));
+            slot.setReserved(isSlotReserved(reservations, startDate, endDate));
             slot.setDate(date);
         }
         return allSlots;
@@ -97,8 +98,7 @@ public class RoomService {
         return room.getReservationList();
     }
 
-    public boolean isSlotReserved(String roomName, Timestamp startDate, Timestamp endDate){
-        List<Reservation> reservations = getRoomReservations(roomName);
+    public boolean isSlotReserved(List<Reservation> reservations , Timestamp startDate, Timestamp endDate){
         Stream<Reservation> stream = reservations.stream();
         boolean isReserved = stream.anyMatch(reservation-> reservation.getStartDate().equals(startDate) && reservation.getEndDate().equals(endDate));
         return isReserved;

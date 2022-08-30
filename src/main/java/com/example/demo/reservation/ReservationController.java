@@ -20,6 +20,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 @RequestMapping(path = "api/v1")
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin(origins = "*")
 public class ReservationController {
     private final ReservationService reservationService;
     private final AppUserServiceImpl appUserServiceImpl;
@@ -48,7 +49,7 @@ public class ReservationController {
         return ResponseEntity.ok().body(reservationService.getReservations());
     }
 
-    @DeleteMapping(value = "/reservations/{id}")
+    @DeleteMapping("/reservations/{id}")
     public ResponseEntity<String> deleteReservation(@PathVariable Long id) {
 
         boolean isRemoved = reservationService.deleteReservation(id);

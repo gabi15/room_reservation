@@ -30,7 +30,10 @@ public class DemoApplication {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedMethod(CorsConfiguration.ALL);
+        configuration.applyPermitDefaultValues();
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 

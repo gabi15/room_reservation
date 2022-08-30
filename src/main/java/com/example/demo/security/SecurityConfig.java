@@ -15,8 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.*;
 
 @Configuration @EnableWebSecurity @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -39,6 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //Order is important
         http.authorizeRequests().antMatchers(GET, "/api/v1/login/**").permitAll();
         http.authorizeRequests().antMatchers(POST, "/api/v1/user/save").permitAll();
+//        http.authorizeRequests().antMatchers(DELETE, "/api/v1/reservations/").permitAll();
 //        //http.authorizeRequests().antMatchers(POST, "/api/v1/reservation/save").hasAnyAuthority("ROLE_USER");
 //        http.authorizeRequests().antMatchers(GET, "/api/v1/user/get").hasAnyAuthority("ROLE_USER");
 //        http.authorizeRequests().antMatchers(GET, "/api/v1/users/").hasAnyAuthority("ADMIN_USER");

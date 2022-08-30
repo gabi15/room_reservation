@@ -32,23 +32,16 @@ const RoomSlots = () => {
         fetchSlots();
     }, [roomName]);
 
-    // useEffect(() => {
-    //     console.log(roomName);
-    //     console.log(slotData);
-    //     slotData.forEach(element => {
-    //         console.log(element);
-    //     });
-    // }, [slotData])
-
 
     const getDate = (offset = 0) => {
-        let today = new Date();
-        let dd = String(today.getDate() + offset).padStart(2, '0');
-        let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-        let yyyy = today.getFullYear();
+        let date = new Date();
+        date.setDate(date.getDate()+offset)
+        let dd = String(date.getDate()).padStart(2, '0');
+        let mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
+        let yyyy = date.getFullYear();
 
-        today = dd + '-' + mm + '-' + yyyy;
-        return today;
+        date = dd + '-' + mm + '-' + yyyy;
+        return date;
     }
 
     const getActionVariant = (isReserved) => {
@@ -59,7 +52,7 @@ const RoomSlots = () => {
     }
 
 
-    const submitReservation = async (e, startHour, endHour, day, isDisabled) => {
+    const submitReservation = async (e, startHour, endHour, day) => {
         console.log('aaa');
         e.preventDefault();
         let startDate = day + " " + startHour + ":00";
@@ -69,7 +62,7 @@ const RoomSlots = () => {
 
         const authHeaderData = authHeader() || null;
 
-        axios.post("http://localhost:8080/api/v1/reservation/save", {
+        return axios.post("http://localhost:8080/api/v1/reservation/save", {
             roomName: roomName,
             startDate: startDate,
             endDate: endDate,
@@ -96,18 +89,19 @@ const RoomSlots = () => {
                     {slotsToDisplay
                         .map((slot, index) => {
                             if (slot.date == today) {
-                                let isDisabled = slot['reserved'];
                                 return (
-                                    <ListGroup.Item key={`${today}_${slot['start']}`} action variant={getActionVariant(isDisabled)}>
-                                        {slot['start']} - {slot['end']}
+                                    <ListGroup.Item key={`${today}_${slot.start}`} action variant={getActionVariant(slot.reserved)}>
+                                        {slot.start} - {slot.end}
                                         <Button as="input"
-                                            disabled={isDisabled}
+                                            disabled={slot.reserved}
                                             type="button"
                                             value="Zarezerwuj"
                                             className="reservation_button"
-                                            onClick={(e) => {
-                                                isDisabled = submitReservation(e, slot['start'], slot['end'], today);
-
+                                            onClick={async (e) => {
+                                                const isReserved = await submitReservation(e, slot.start, slot.end, today);
+                                                isReserved ? alert("created successfully") : alert("reservation failed");
+                                                setSlotData(prev => prev.map((slot2, index2) => index2 === index ? { ...slot2, reserved: isReserved } : slot2));
+                                                
                                             }}
                                         />
                                     </ListGroup.Item >
