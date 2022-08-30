@@ -49,9 +49,16 @@ public class AppUserController {
     public ResponseEntity<UserWithoutPassword> getUser(HttpServletRequest request) {
         String email = AuthHandler.getCurrentUserEmail(request.getHeader(AUTHORIZATION));
         AppUser appUser = appUserServiceImpl.getAppUser(email);
-        return ResponseEntity.ok().body(new UserWithoutPassword(appUser.getEmail(), appUser.getName(), appUser.getSurname()));
-
+        return ResponseEntity.ok().body(new UserWithoutPassword(appUser.getId(), appUser.getEmail(), appUser.getName(), appUser.getSurname()));
     }
+
+    @GetMapping("/user/get_role")
+    public ResponseEntity<List<Role>> getRoles(HttpServletRequest request) {
+        String email = AuthHandler.getCurrentUserEmail(request.getHeader(AUTHORIZATION));
+        List<Role> roles = appUserServiceImpl.getUserRole(email);
+        return ResponseEntity.ok().body(roles);
+    }
+
 
     @PostMapping("/user/save")
     public ResponseEntity<String> registerNewAppUser(@RequestBody AppUser appUser) {
@@ -123,7 +130,7 @@ public class AppUserController {
         appUserServiceImpl.deleteAppUser(id);
     }
 
-    @PutMapping(path = {"userId"})
+    @PutMapping(path = "/user/{userId}")
     public void updateAppUser(
             @PathVariable("userId") Long id,
             @RequestParam(required = false) String name,
@@ -142,6 +149,7 @@ class RoleToUserForm {
 @Data
 @AllArgsConstructor
 class UserWithoutPassword {
+    private Long id;
     private String email;
     private String name;
     private String surname;

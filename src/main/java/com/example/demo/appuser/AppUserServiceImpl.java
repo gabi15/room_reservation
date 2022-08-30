@@ -140,4 +140,10 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
         List<Reservation> reservations = appUserRepository.findReservationsByEmail(email);
         return reservations;
     }
+
+    @Override
+    public List<Role> getUserRole(String email) {
+        List<Role> roles = appUserRepository.findRolesByEmail(email);
+        return roles;
+    }
 }

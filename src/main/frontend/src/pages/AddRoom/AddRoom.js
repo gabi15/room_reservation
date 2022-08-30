@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import './AddRoom.css';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import { authHeader } from '../../DataService';
 
 const AddRoom = () => {
 
@@ -33,6 +34,7 @@ const AddRoom = () => {
 
         let isValidRoomName = validateRoomName(roomName) 
         let isValidStartEnd = validateStartEnd(startTime, endTime);
+        const authHeaderData = authHeader();
 
         if (!isValidRoomName) {
             alert("Nieparwidłowe dane - upewnij się że wypełniłeś wszystkie pola");
@@ -49,7 +51,8 @@ const AddRoom = () => {
             startTime: startTime,
             endTime: endTime,
             reservationTimeInMinutes: reservationTimeInMinutes
-        }).then(res => {
+        }, {headers: authHeaderData}
+        ).then(res => {
             console.log(res);
             alert("Poprawnie dodano nowy pokój")
 

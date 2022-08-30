@@ -16,4 +16,7 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
 
     @Query("SELECT u.reservationList FROM AppUser u WHERE u.email=?1")
     List<Reservation> findReservationsByEmail(String email);
+
+    @Query("SELECT u.roles FROM AppUser u WHERE u.email=?1")
+    List<Role> findRolesByEmail(String email);
 }

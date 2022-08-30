@@ -48,9 +48,7 @@ const Rooms = () => {
                     if (e.response.status == 401) {
                         nav("/login");
                     }
-
                 })
-
         }
 
         fetchRooms();

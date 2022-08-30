@@ -3,7 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import './Login.css';
 import axios from 'axios';
-import authHeader from '../../DataService';
+import {authHeader} from '../../DataService';
 import { useNavigate } from "react-router-dom";
 
 function Login() {
@@ -28,6 +28,22 @@ function Login() {
       if(res.data.access_token){
         localStorage.setItem("user", JSON.stringify(res.data));
         console.log(res.data.access_token);
+        try {
+          const authHeaderData = authHeader();
+          const res2 = await axios.get("http://localhost:8080/api/v1/user/get_role", { headers: authHeaderData }
+          );
+          let roles = res2.data
+          let isAdmin = false;
+          roles.forEach(role => {if (role.name="ROLE_ADMIN"){
+            isAdmin = true;
+          }});
+          if(isAdmin){
+            localStorage.setItem("isAdmin", true);
+          }
+          
+        } catch (error) {
+          console.log(error.response.data);
+        }
         nav("/user_account")
       }
       
@@ -40,19 +56,6 @@ function Login() {
     
   }
 
-//   const fetchUserProfile = () => {
-//     console.log(authHeader())
-//     axios.get("http://localhost:8080/api/v1/user/get", {headers: authHeader()})
-//     .then(res => {
-//         console.log(res);
-//         setUserData(prev => ({ ...prev, ...res.data}))
-//     })
-
-// }
-
-// useEffect(()=>{
-//   fetchUserProfiles();
-// }, []);
 
   return (
     <div className="Login">
@@ -70,6 +73,12 @@ function Login() {
             <Form.Label>Hasło</Form.Label>
             <Form.Control ref={passwordRef} type="password" placeholder="Wpisz hasło" />
           </Form.Group>
+          <Form.Check 
+            type="checkbox"
+            id="default-checkbox"
+            label="loguj jako admin"
+          />
+          <br></br>
           <Button variant="primary" type="submit">
             Submit
           </Button>

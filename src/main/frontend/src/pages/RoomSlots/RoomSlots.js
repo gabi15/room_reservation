@@ -119,9 +119,9 @@ const RoomSlots = () => {
         <div className="RoomSlots">
             <h1>Dostępne daty rezerwacji</h1>
             <div className="flex-parent-element">
-                <div className="flex-child-element magenta">{displaySlots(slotData, 0)}</div>
-                <div className="flex-child-element magenta">{displaySlots(slotData, 1)}</div>
-                <div className="flex-child-element magenta">{displaySlots(slotData, 2)}</div>
+                <div className="flex-child-element">{displaySlots(slotData, 0)}</div>
+                <div className="flex-child-element">{displaySlots(slotData, 1)}</div>
+                <div className="flex-child-element">{displaySlots(slotData, 2)}</div>
             </div>
         </div>
     );

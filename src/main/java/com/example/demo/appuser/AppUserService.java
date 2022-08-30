@@ -10,8 +10,6 @@ public interface AppUserService {
     void addRoleToAppUser(String email, String roleName);
     AppUser getAppUser(String email);
     List<AppUser> getUsers();
-
     List<Reservation> getReservationsByEmail(String email);
-
-
+    public List<Role> getUserRole(String email);
 }
