@@ -18,6 +18,7 @@ const Layout = (props) => {
 
             <Nav.Link as={Link} to="/reservations_admin">Rezerwacje</Nav.Link>
             <Nav.Link as={Link} to="/add_room">Dodaj pokój</Nav.Link>
+            <Nav.Link as={Link} to="/rooms_admin">Pokoje admin</Nav.Link>
         </Nav>
     );
 

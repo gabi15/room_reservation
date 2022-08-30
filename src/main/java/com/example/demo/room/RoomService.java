@@ -107,6 +107,15 @@ public class RoomService {
         return isReserved;
     }
 
+    public boolean deleteRoom(Long id) {
+        Optional<Room> reservation = roomRepository.findById(id);
+        if (reservation.isEmpty()){
+            throw new IllegalArgumentException("no such room");
+        }
+        roomRepository.deleteById(id);
+        return true;
+    }
+
     @Getter
     @Setter
     @AllArgsConstructor

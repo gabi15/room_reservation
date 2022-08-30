@@ -13,22 +13,7 @@ import './RoomsAdmin.css'
 const RoomsAdmin = () => {
     const [rooms, setRooms] = useState([]);
     const nav = useNavigate();
-    // let displayedRooms;
-
-    const displayRooms = (roomsToDisplay) => {
-        return (
-            <div className= "room_list">
-            <ListGroup as="ul">
-                         {roomsToDisplay.map((room, index) => (
-                    <ListGroup.Item as={Link} to={`/room/${room}`} key={`${index}_${room}`}> {room} </ListGroup.Item >
-                ))}
-            </ListGroup>
-            </div>
-        );
-    }
-
-
-
+    
     useEffect(() => {
         const fetchRooms = () => {
 
@@ -37,12 +22,11 @@ const RoomsAdmin = () => {
 
             axios.get("http://localhost:8080/api/v1/rooms", { headers: authHeaderData })
                 .then(res => {
-                    let roomObjects = res.data
-                    let result = roomObjects.map(a => a.name);
-                    console.log(result);
-                    setRooms(result);
+                    // let roomObjects = res.data
+                    // let result = roomObjects.map(a => a.name);
+                    // console.log(result);
+                    setRooms(res.data);
                     console.log(rooms);
-                    // displayedRooms = displayRooms(rooms);
                 })
                 .catch(e => {
                     if (e.response.status == 401) {
@@ -55,6 +39,53 @@ const RoomsAdmin = () => {
 
         fetchRooms();
     }, []);
+
+    const displayRooms = (roomsToDisplay) => {
+        return (
+            <div className="room_list">
+                <ListGroup as="ul">
+                    {roomsToDisplay.map((room, index) => (
+                        <ListGroup.Item as={Link} to={`/room/${room.name}`} key={`${index}_${room.name}`}> {room.name}
+                            <Button as="input"
+                                id={`button_${index}`}
+                                type="button"
+                                value="Usuń pokój"
+                                className="reservation_button"
+                                onClick={async (e) => {
+                                    const isSuccessful = await deleteRoom(e, room, index);
+                                    isSuccessful ? alert("usunięto pokój") : alert("ups, coś poszło nie tak");
+                                }}
+                            />
+                        </ListGroup.Item >
+                    ))}
+                </ListGroup>
+            </div>
+        );
+    }
+
+    const deleteRoom = async (e, room, index) => {
+        e.preventDefault();
+
+        const authHeaderData = authHeader() || null;
+        document.getElementById(`button_${index}`).disabled = true;
+        console.log(authHeaderData);
+
+        return axios.delete(`http://localhost:8080/api/v1/rooms/${room.id}`, {
+            headers: authHeaderData,
+        })
+            .then(res => {
+                console.log(res);
+                return true;
+            })
+            .catch(error => {
+                console.log(error);
+                return false;
+            });
+    }
+
+
+
+
 
     return (
         <div className="RoomsAdmin">
