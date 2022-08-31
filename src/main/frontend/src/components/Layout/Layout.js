@@ -24,6 +24,7 @@ const Layout = (props) => {
             <Nav.Link as={Link} to="/rooms_admin">Pokoje admin</Nav.Link>
             <Nav.Link href="/login" onClick={() => AuthenticationService.logout()}>Wyloguj się</Nav.Link>
             <Nav.Link as={Link} to="/user_account">Moje Dane</Nav.Link>
+            <Nav.Link as={Link} to="/add_admin">Dodaj admina</Nav.Link>
         </Nav>
     );
 

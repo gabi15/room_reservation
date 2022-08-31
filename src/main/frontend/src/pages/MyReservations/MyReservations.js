@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { authHeader } from '../../DataService';
-import Navigation from './../../components/Navigation/Navigation';
 import React, { useState, useEffect, useRef } from 'react';
 import Table from 'react-bootstrap/Table'
 import { useNavigate } from "react-router-dom";
@@ -16,8 +15,10 @@ const MyReservations = () => {
 
     useEffect(() => {
         const fetchMyReservations = () => {
-
             const authHeaderData = authHeader() || null;
+            if(authHeaderData){
+                return;
+            }
             console.log(authHeaderData);
 
             axios.get("http://localhost:8080/api/v1/reservations/my_reservations", { headers: authHeaderData })
@@ -31,7 +32,6 @@ const MyReservations = () => {
                         nav("/login");
                     }
                 })
-
         }
 
         fetchMyReservations();

@@ -62,8 +62,9 @@ const ReservationsAdmin = () => {
     }
 
     return (
-        <div className="ReservationsAdmin">
+        <div className="reservationsAdmin">
             <div className="reservations_form">
+                <h2>Wyszukaj rezerwacje</h2>
                 <Form id="register_form" onSubmit={fetchReservations}>
                     <select
                         className="form-select form-select-lg mb-3"
@@ -74,12 +75,13 @@ const ReservationsAdmin = () => {
                             <option value={room} key={`${room}_${index}`}> {room} </option>))}
                     </select>
                     <input id="startDate" className="form-control" type="date" ref={dateRef} />
+                    <br></br>
                     <Button variant="primary" type="submit">
                         Submit
                     </Button>
                 </Form>
-            </div>
             <CustomList reservations={reservations} />
+        </div>
         </div>
     );
 }

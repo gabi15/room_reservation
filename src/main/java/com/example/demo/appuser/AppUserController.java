@@ -72,6 +72,18 @@ public class AppUserController {
         return ResponseEntity.created(uri).body("success");
     }
 
+    @PostMapping("/user/save/admin")
+    public ResponseEntity<String> registerNewAppAdmin(@RequestBody AppUser appUser) {
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/user/save").toUriString());
+        try {
+            appUserServiceImpl.saveAppUser(appUser);
+            appUserServiceImpl.addRoleToAppUser(appUser.getEmail(), "ROLE_ADMIN");
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        return ResponseEntity.created(uri).body("success");
+    }
+
     @PostMapping("/role/save")
     public ResponseEntity<Role> saveRole(@RequestBody Role role) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/role/save").toUriString());

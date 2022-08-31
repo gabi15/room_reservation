@@ -3,7 +3,16 @@ import { getDateFromString, getTimeFromString } from '../../DateHelper'
 
 
 const CustomList = ({ reservations }) => {
-    return <ListGroup as="ul">
+
+    const resLength = reservations.length
+    const noReservationsInfo = (
+        <h2>Brak rezerwacji</h2>
+    )
+    const reservationsInfo = (
+        <h2>Rezerwacje</h2>
+    )
+
+    return <div><br></br>{resLength == 0 ? noReservationsInfo : reservationsInfo}<ListGroup as="ul">
         {reservations
             .map((slot, index) => {
                 let startDate = new Date(slot.startDate);
@@ -29,6 +38,7 @@ const CustomList = ({ reservations }) => {
                 )
             })}
     </ListGroup>
-} 
+    </div>
+}
 
 export default CustomList;

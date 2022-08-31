@@ -1,12 +1,9 @@
 import axios from 'axios';
 import { authHeader } from '../../DataService';
-import Navigation from '../../components/Navigation/Navigation';
 import React, { useState, useEffect, useRef } from 'react';
-import Table from 'react-bootstrap/Table'
 import { useNavigate } from "react-router-dom";
 import { Link } from 'react-router-dom';
 import ListGroup from 'react-bootstrap/ListGroup'
-import { Button } from 'react-bootstrap';
 import './Rooms.css'
 
 
@@ -17,12 +14,12 @@ const Rooms = () => {
 
     const displayRooms = (roomsToDisplay) => {
         return (
-            <div className= "room_list">
-            <ListGroup as="ul">
-                         {roomsToDisplay.map((room, index) => (
-                    <ListGroup.Item as={Link} to={`/room/${room}`} key={`${index}_${room}`}> {room} </ListGroup.Item >
-                ))}
-            </ListGroup>
+            <div className="room_list">
+                <ListGroup as="ul">
+                    {roomsToDisplay.map((room, index) => (
+                        <ListGroup.Item as={Link} to={`/room/${room}`} key={`${index}_${room}`}> {room} </ListGroup.Item >
+                    ))}
+                </ListGroup>
             </div>
         );
     }
@@ -42,12 +39,9 @@ const Rooms = () => {
                     console.log(result);
                     setRooms(result);
                     console.log(rooms);
-                    // displayedRooms = displayRooms(rooms);
                 })
                 .catch(e => {
-                    if (e.response.status == 401) {
-                        nav("/login");
-                    }
+                    nav("/login");
                 })
         }
 
