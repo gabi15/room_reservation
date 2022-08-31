@@ -38,10 +38,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //Order is important
         http.authorizeRequests().antMatchers(GET, "/api/v1/login/**").permitAll();
         http.authorizeRequests().antMatchers(POST, "/api/v1/user/save").permitAll();
-//        http.authorizeRequests().antMatchers(DELETE, "/api/v1/reservations/").permitAll();
-//        //http.authorizeRequests().antMatchers(POST, "/api/v1/reservation/save").hasAnyAuthority("ROLE_USER");
-//        http.authorizeRequests().antMatchers(GET, "/api/v1/user/get").hasAnyAuthority("ROLE_USER");
-//        http.authorizeRequests().antMatchers(GET, "/api/v1/users/").hasAnyAuthority("ADMIN_USER");
+
+        http.authorizeRequests().antMatchers( "/api/v1/user/").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN");
+        http.authorizeRequests().antMatchers(GET, "/api/v1/users/").hasAnyAuthority("ADMIN_USER");
+        http.authorizeRequests().antMatchers( POST,"/api/v1/role/save").hasAnyAuthority( "ROLE_ADMIN");
+
+        http.authorizeRequests().antMatchers( "/api/v1/reservations/").hasAnyAuthority( "ROLE_USER", "ROLE_ADMIN");
+        http.authorizeRequests().antMatchers( "/api/v1/reservation/").hasAnyAuthority( "ROLE_USER", "ROLE_ADMIN");
+        http.authorizeRequests().antMatchers( "/api/v1/room/{name}").hasAnyAuthority( "ROLE_USER", "ROLE_ADMIN");
+        http.authorizeRequests().antMatchers( "/api/v1/rooms/get").hasAnyAuthority( "ROLE_USER", "ROLE_ADMIN");
+        http.authorizeRequests().antMatchers( "/api/v1/room_reservations/{name}").hasAnyAuthority( "ROLE_USER", "ROLE_ADMIN");
+        http.authorizeRequests().antMatchers( "/api/v1/room/").hasAnyAuthority(  "ROLE_ADMIN");
 //        http.authorizeRequests().anyRequest().authenticated();
         http.authorizeRequests().anyRequest().permitAll();
         http.addFilter(customAuthenticationFilter);

@@ -80,7 +80,8 @@ public class RoomService {
 
             Timestamp startDate = new Timestamp(DateHandler.handleDate(startDateString).getTime());
             Timestamp endDate = new Timestamp(DateHandler.handleDate(endDateString).getTime());
-            slot.setReserved(isSlotReserved(reservations, startDate, endDate));
+            Timestamp now = new Timestamp(System.currentTimeMillis());
+            slot.setReserved(isSlotReserved(reservations, startDate, endDate, now));
             slot.setDate(date);
         }
         return allSlots;
@@ -101,10 +102,11 @@ public class RoomService {
         return room.getReservationList();
     }
 
-    public boolean isSlotReserved(List<Reservation> reservations , Timestamp startDate, Timestamp endDate){
+    public boolean isSlotReserved(List<Reservation> reservations , Timestamp startDate, Timestamp endDate, Timestamp now){
         Stream<Reservation> stream = reservations.stream();
         boolean isReserved = stream.anyMatch(reservation-> reservation.getStartDate().equals(startDate) && reservation.getEndDate().equals(endDate));
-        return isReserved;
+        boolean isPastNow =  startDate.compareTo(now)<=0;
+        return isPastNow || isReserved;
     }
 
     public boolean deleteRoom(Long id) {

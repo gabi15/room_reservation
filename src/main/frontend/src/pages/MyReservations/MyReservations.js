@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import ListGroup from 'react-bootstrap/ListGroup'
 import Button from 'react-bootstrap/Button'
 import { getDateFromString, getTimeFromString } from '../../DateHelper'
+import './MyReservations.css'
 
 
 const MyReservations = () => {
@@ -90,7 +91,7 @@ const MyReservations = () => {
     }
 
     return (
-        <div className="MyReservations">
+        <div className="myReservations">
             <h1>Twoje rezerwacje</h1>
             {displayReservations()}
         </div>

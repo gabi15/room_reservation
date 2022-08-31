@@ -1,6 +1,7 @@
 class AuthService {
   logout() {
     localStorage.removeItem("user");
+    localStorage.removeItem("isAdmin");
   }
 
   getCurrentUser() {
@@ -8,7 +9,10 @@ class AuthService {
   }
 
   getIsAdmin(){
-    return localStorage.getItem('isAdmin');
+    if (localStorage.getItem('isAdmin') == true){
+      return true;
+    }
+    return false;
   }
 }
 export default new AuthService();

@@ -30,7 +30,7 @@ public class RoomController {
         return ResponseEntity.created(uri).body(roomService.editRoom(roomForm));
     }
 
-    @GetMapping("/rooms")
+    @GetMapping("/rooms/get")
     public ResponseEntity<List<Room>> getRooms(){
         return ResponseEntity.ok().body(roomService.getRooms());
     }
@@ -50,7 +50,7 @@ public class RoomController {
         return ResponseEntity.ok().body(roomService.getRoomReservations(name));
     }
 
-    @DeleteMapping("/rooms/{id}")
+    @DeleteMapping("/room/{id}")
     public ResponseEntity<String> deleteReservation(@PathVariable Long id) {
 
         boolean isRemoved = roomService.deleteRoom(id);

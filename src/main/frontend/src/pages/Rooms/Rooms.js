@@ -35,7 +35,7 @@ const Rooms = () => {
             const authHeaderData = authHeader();
             console.log(authHeaderData);
 
-            axios.get("http://localhost:8080/api/v1/rooms", { headers: authHeaderData })
+            axios.get("http://localhost:8080/api/v1/rooms/get", { headers: authHeaderData })
                 .then(res => {
                     let roomObjects = res.data
                     let result = roomObjects.map(a => a.name);

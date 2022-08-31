@@ -3,10 +3,10 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import './Login.css';
 import axios from 'axios';
-import {authHeader} from '../../DataService';
+import { authHeader } from '../../DataService';
 import { useNavigate } from "react-router-dom";
 
-function Login() {
+const Login = (props) => {
 
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -17,7 +17,7 @@ function Login() {
 
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
-            
+
     try {
       const res = await axios.post("http://localhost:8080/api/v1/login", {
         "email": email,
@@ -25,42 +25,50 @@ function Login() {
       });
 
       console.log(res);
-      if(res.data.access_token){
+      if (res.data.access_token) {
         localStorage.setItem("user", JSON.stringify(res.data));
         console.log(res.data.access_token);
         try {
           const authHeaderData = authHeader();
           const res2 = await axios.get("http://localhost:8080/api/v1/user/get_role", { headers: authHeaderData }
           );
-          let roles = res2.data
+          let roles = res2.data;
           let isAdmin = false;
-          roles.forEach(role => {if (role.name="ROLE_ADMIN"){
-            isAdmin = true;
-          }});
-          if(isAdmin){
-            localStorage.setItem("isAdmin", true);
+          roles.forEach(role => {
+            if (role.name == "ROLE_ADMIN") {
+              isAdmin = true;
+            }
+          });
+          if (isAdmin) {
+            props.setUser(false);
+            localStorage.setItem('isAdmin', 'true');
           }
-          
+
         } catch (error) {
           console.log(error.response.data);
         }
         nav("/user_account")
       }
-      
+
       return res.data;
-      
+
     } catch (error) {
       console.log(error.response.data);
       alert("Niepoprawne dane: " + error.response.data.message);
     }
-    
+
   }
+
+  // const logged = (
+  //   <div>
+  //     <p>aaa</p>
+  //   </div>
+  // )
 
 
   return (
     <div className="Login">
       <h1>Zaloguj się aby móc korzystać z szalonych możliwości logowania</h1>
-
       <div className="form_style">
 
         <Form id="login_form" onSubmit={handleSubmitLogin}>
@@ -73,7 +81,7 @@ function Login() {
             <Form.Label>Hasło</Form.Label>
             <Form.Control ref={passwordRef} type="password" placeholder="Wpisz hasło" />
           </Form.Group>
-          <Form.Check 
+          <Form.Check
             type="checkbox"
             id="default-checkbox"
             label="loguj jako admin"

@@ -26,7 +26,6 @@ const RoomSlots = () => {
                 .catch(e => {
                     nav("/login");
                 })
-
         }
 
         fetchSlots();
@@ -116,7 +115,7 @@ const RoomSlots = () => {
     }
 
     return (
-        <div className="RoomSlots">
+        <div className="roomSlots">
             <h1>Dostępne daty rezerwacji</h1>
             <div className="flex-parent-element">
                 <div className="flex-child-element">{displaySlots(slotData, 0)}</div>

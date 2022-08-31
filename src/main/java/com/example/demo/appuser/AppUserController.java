@@ -125,10 +125,10 @@ public class AppUserController {
         }
     }
 
-    @DeleteMapping(path = "{userId}")
-    public void deleteAppUser(@PathVariable("userId") Long id) {
-        appUserServiceImpl.deleteAppUser(id);
-    }
+//    @DeleteMapping(path = "{userId}")
+//    public void deleteAppUser(@PathVariable("userId") Long id) {
+//        appUserServiceImpl.deleteAppUser(id);
+//    }
 
     @PutMapping(path = "/user/{userId}")
     public void updateAppUser(

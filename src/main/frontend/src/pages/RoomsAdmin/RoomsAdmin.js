@@ -20,21 +20,16 @@ const RoomsAdmin = () => {
             const authHeaderData = authHeader();
             console.log(authHeaderData);
 
-            axios.get("http://localhost:8080/api/v1/rooms", { headers: authHeaderData })
+            axios.get("http://localhost:8080/api/v1/rooms/get", { headers: authHeaderData })
                 .then(res => {
                     // let roomObjects = res.data
                     // let result = roomObjects.map(a => a.name);
                     // console.log(result);
                     setRooms(res.data);
-                    console.log(rooms);
                 })
                 .catch(e => {
-                    if (e.response.status == 401) {
                         nav("/login");
-                    }
-
                 })
-
         }
 
         fetchRooms();
@@ -70,7 +65,7 @@ const RoomsAdmin = () => {
         document.getElementById(`button_${index}`).disabled = true;
         console.log(authHeaderData);
 
-        return axios.delete(`http://localhost:8080/api/v1/rooms/${room.id}`, {
+        return axios.delete(`http://localhost:8080/api/v1/room/${room.id}`, {
             headers: authHeaderData,
         })
             .then(res => {

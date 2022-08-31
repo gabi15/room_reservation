@@ -1,25 +1,33 @@
-.flex-parent-element {
-    display: flex;
-    width: 90%;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .flex-child-element {
-    flex: 1;
-    border: 2px solid blueviolet;
-    margin: 10px;
-    padding-top: 15px;
-    padding-bottom: 15px;
-    border-radius: 20px;
-  }
-  
-  .flex-child-element:first-child {
-    margin-right: 20px;
-  }
+.roomSlots {
+  position: relative;
+  align-items: center;
+  justify-content: center;
+}
 
-.reservation_button{
+.flex-parent-element {
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+.flex-child-element {
+  flex: 1;
+  border: 2px solid blueviolet;
+  margin: 10px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border-radius: 20px;
+}
+
+.flex-child-element:first-child {
+  margin-right: 20px;
+}
+
+.reservation_button {
   float: right;
 }
 
-p { text-align: center }
+p {
+  text-align: center
+}

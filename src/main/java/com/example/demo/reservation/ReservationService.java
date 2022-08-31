@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +28,8 @@ public class ReservationService {
         AppUser appUser = appUserService.getAppUser(email);
         Reservation reservation = new Reservation(reservationForm.getStartDate(), reservationForm.getEndDate(), room, appUser);
         List<Reservation> reservations = getRoomReservations(reservationForm.getRoomName());
-        boolean isSlotReserved = roomService.isSlotReserved(reservations, reservation.getStartDate(), reservation.getEndDate());
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        boolean isSlotReserved = roomService.isSlotReserved(reservations, reservation.getStartDate(), reservation.getEndDate(), now);
         if (isSlotReserved){
             throw new IllegalArgumentException("already reserved");
         }
