@@ -102,7 +102,7 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
 
 
     @Transactional
-    public void updateAppUser(Long id, String name, String email) {
+    public void updateAppUser(Long id, String name, String surname, String email) {
         AppUser user = appUserRepository.findById(id)
                 .orElseThrow(() -> new IllegalStateException(
                         "student with id " + id + "does not exist"
@@ -111,12 +111,16 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
         if (name != null && name.length() > 0 && !Objects.equals(user.getName(), name)) {
             user.setName(name);
         }
+
+        if (surname != null && surname.length() > 0 && !Objects.equals(user.getSurname(), surname)) {
+            user.setSurname(surname);
+        }
         if (email != null && email.length() > 0 && !Objects.equals(user.getEmail(), email)) {
-            Optional<AppUser> userByEmail = appUserRepository.findUserByEmail(user.getEmail());
+            Optional<AppUser> userByEmail = appUserRepository.findUserByEmail(email);
             if (userByEmail.isPresent()) {
                 throw new IllegalStateException("Email taken");
             }
-            user.setName(name);
+            user.setEmail(email);
         }
     }
 

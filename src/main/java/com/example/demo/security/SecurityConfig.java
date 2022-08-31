@@ -39,6 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers(GET, "/api/v1/login/**").permitAll();
         http.authorizeRequests().antMatchers(POST, "/api/v1/user/save").permitAll();
 
+        http.authorizeRequests().antMatchers( POST,"/api/v1/user/save/admin").hasAnyAuthority( "ROLE_ADMIN");
         http.authorizeRequests().antMatchers( "/api/v1/user/").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN");
         http.authorizeRequests().antMatchers(GET, "/api/v1/users/").hasAnyAuthority("ADMIN_USER");
         http.authorizeRequests().antMatchers( POST,"/api/v1/role/save").hasAnyAuthority( "ROLE_ADMIN");
@@ -48,6 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers( "/api/v1/room/{name}").hasAnyAuthority( "ROLE_USER", "ROLE_ADMIN");
         http.authorizeRequests().antMatchers( "/api/v1/rooms/get").hasAnyAuthority( "ROLE_USER", "ROLE_ADMIN");
         http.authorizeRequests().antMatchers( "/api/v1/room_reservations/{name}").hasAnyAuthority( "ROLE_USER", "ROLE_ADMIN");
+        http.authorizeRequests().antMatchers( "/api/v1/room/").hasAnyAuthority(  "ROLE_ADMIN");
         http.authorizeRequests().antMatchers( "/api/v1/room/").hasAnyAuthority(  "ROLE_ADMIN");
 //        http.authorizeRequests().anyRequest().authenticated();
         http.authorizeRequests().anyRequest().permitAll();

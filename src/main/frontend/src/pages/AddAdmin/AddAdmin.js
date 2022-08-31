@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
+import { authHeader } from '../../DataService';
 import './AddAdmin.css';
+
 
 function Register() {
 
@@ -29,7 +31,7 @@ function Register() {
     return isValid;
   }
 
-  const handleSubmitRegister = async (e) => {
+  const handleSubmitNewAdmin = async (e) => {
     e.preventDefault();
 
     const email = emailRef.current.value;
@@ -38,6 +40,7 @@ function Register() {
     const surname = surnameRef.current.value;
 
     const isValid = validate(email, password, name, surname);
+    const authHeaderData = authHeader();
 
     if(!isValid){
       alert("Nieparwidłowe dane - upewnij się że wypełniłeś wszystkie pola, oraz, że długość hasła jest większa od 4 a mniejsza od 30");
@@ -49,10 +52,9 @@ function Register() {
       surname: surname,
       name: name,
       password: password
-    }).then(res => {
-      console.log(res);
+    }, {headers : authHeaderData}).then(res => {
+        alert("Poprawnie dodano nowego admina")
     }).catch(error => {
-      console.log(error.response.data);
       alert("Niepoprawne dane: " + error.response.data);
     });
 
@@ -64,7 +66,7 @@ function Register() {
 
       <div className="form_style">
 
-        <Form id="register_form" onSubmit={handleSubmitRegister}>
+        <Form id="register_form" onSubmit={handleSubmitNewAdmin}>
           <Form.Group className="mb-3" controlId="formBasicName">
             <Form.Label>Imię</Form.Label>
             <Form.Control ref={nameRef} type="text" placeholder="Wpisz imie" />

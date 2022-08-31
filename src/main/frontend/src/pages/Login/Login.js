@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import './Login.css';
@@ -24,10 +24,8 @@ const Login = (props) => {
         "password": password
       });
 
-      console.log(res);
       if (res.data.access_token) {
         localStorage.setItem("user", JSON.stringify(res.data));
-        console.log(res.data.access_token);
         try {
           const authHeaderData = authHeader();
           const res2 = await axios.get("http://localhost:8080/api/v1/user/get_role", { headers: authHeaderData }
@@ -59,13 +57,6 @@ const Login = (props) => {
 
   }
 
-  // const logged = (
-  //   <div>
-  //     <p>aaa</p>
-  //   </div>
-  // )
-
-
   return (
     <div className="Login">
       <h1>Zaloguj się aby móc korzystać z szalonych możliwości logowania</h1>
@@ -81,11 +72,6 @@ const Login = (props) => {
             <Form.Label>Hasło</Form.Label>
             <Form.Control ref={passwordRef} type="password" placeholder="Wpisz hasło" />
           </Form.Group>
-          <Form.Check
-            type="checkbox"
-            id="default-checkbox"
-            label="loguj jako admin"
-          />
           <br></br>
           <Button variant="primary" type="submit">
             Submit

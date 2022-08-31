@@ -1,8 +1,6 @@
 import axios from 'axios';
 import { authHeader } from '../../DataService';
-import Navigation from '../../components/Navigation/Navigation';
-import React, { useState, useEffect, useRef } from 'react';
-import Table from 'react-bootstrap/Table'
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Link } from 'react-router-dom';
 import ListGroup from 'react-bootstrap/ListGroup'
@@ -13,22 +11,18 @@ import './RoomsAdmin.css'
 const RoomsAdmin = () => {
     const [rooms, setRooms] = useState([]);
     const nav = useNavigate();
-    
+
     useEffect(() => {
         const fetchRooms = () => {
 
             const authHeaderData = authHeader();
-            console.log(authHeaderData);
 
             axios.get("http://localhost:8080/api/v1/rooms/get", { headers: authHeaderData })
                 .then(res => {
-                    // let roomObjects = res.data
-                    // let result = roomObjects.map(a => a.name);
-                    // console.log(result);
                     setRooms(res.data);
                 })
                 .catch(e => {
-                        nav("/login");
+                    nav("/login");
                 })
         }
 
@@ -40,7 +34,7 @@ const RoomsAdmin = () => {
             <div className="room_list">
                 <ListGroup as="ul">
                     {roomsToDisplay.map((room, index) => (
-                        <ListGroup.Item as={Link} to={`/room/${room.name}`} key={`${index}_${room.name}`}> {room.name}
+                        <ListGroup.Item key={`${index}_${room.name}`}> <b>{room.name}</b> <br></br>{room.startTime} - {room.endTime} <br></br>Czas rezerwacji: {room.reservationTimeInMinutes} minut
                             <Button as="input"
                                 id={`button_${index}`}
                                 type="button"
@@ -63,13 +57,11 @@ const RoomsAdmin = () => {
 
         const authHeaderData = authHeader() || null;
         document.getElementById(`button_${index}`).disabled = true;
-        console.log(authHeaderData);
 
         return axios.delete(`http://localhost:8080/api/v1/room/${room.id}`, {
             headers: authHeaderData,
         })
             .then(res => {
-                console.log(res);
                 return true;
             })
             .catch(error => {

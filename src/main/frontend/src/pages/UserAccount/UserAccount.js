@@ -11,7 +11,7 @@ import Button from 'react-bootstrap/Button'
 
 const UserAccount = () => {
     const [userData, setUserData] = useState({
-        id:"",
+        id: "",
         name: "",
         surname: "",
         email: ""
@@ -24,7 +24,7 @@ const UserAccount = () => {
 
     const handleSubmitRegister = async (e) => {
         e.preventDefault();
-    
+
         const name = nameRef.current.value;
         const surname = surnameRef.current.value;
         const email = emailRef.current.value;
@@ -35,33 +35,30 @@ const UserAccount = () => {
         params.append('name', name);
         params.append('surname', surname);
         params.append('email', email);
-        
-        axios.put(`http://localhost:8080/api/v1/user/${userData.id}`, params,
-        { headers: authHeaderData }).then(res => {
-          console.log(res);
-          setUserData({...userData, name:name, surname:surname});
-          alert("Poprawnie zmieniono dane")
-        }).catch(error => {
-          console.log(error.response.data);
-          alert("Niepoprawne dane: " + error.response.data);
-        });
 
-      }
+        axios.put(`http://localhost:8080/api/v1/user/${userData.id}`, params,
+            { headers: authHeaderData }).then(res => {
+                setUserData({ ...userData, name: name, surname: surname });
+                alert("Poprawnie zmieniono dane")
+            }).catch(error => {
+                console.log(error.response.data);
+                alert("Niepoprawne dane: " + error.response.data);
+            });
+
+    }
 
     useEffect(() => {
         const fetchUserProfiles = () => {
 
             const authHeaderData = authHeader() || null;
-            console.log(authHeaderData);
 
             axios.get("http://localhost:8080/api/v1/user/get", { headers: authHeaderData })
 
                 .then(res => {
-                    console.log(res);
                     setUserData(prev => ({ ...prev, ...res.data }))
                 })
                 .catch(e => {
-                        nav("/login");        
+                    nav("/login");
                 })
         }
         fetchUserProfiles();
@@ -79,27 +76,27 @@ const UserAccount = () => {
                         <tr><th>Nazwisko</th><td>{userData.surname}</td></tr>
                     </tbody>
                 </Table>
-            
-           <br></br> 
-           <h2>Zmiana danych</h2>
-        <Form id="update_form" onSubmit={handleSubmitRegister}>
-          <Form.Group className="mb-3" controlId="formBasicName">
-            <Form.Label>Imię</Form.Label>
-            <Form.Control ref={nameRef} type="text" defaultValue={userData.name} />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="formBasicSurname">
-            <Form.Label>Nazwisko</Form.Label>
-            <Form.Control ref={surnameRef} type="text" defaultValue={userData.surname} />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="formBasicSurname">
-            <Form.Label>Email</Form.Label>
-            <Form.Control ref={emailRef} type="text" defaultValue={userData.email} />
-          </Form.Group>
-          <Button variant="primary" type="submit">
-            Submit
-          </Button>
-        </Form>
-        </div>
+
+                <br></br>
+                <h2>Zmiana danych</h2>
+                <Form id="update_form" onSubmit={handleSubmitRegister}>
+                    <Form.Group className="mb-3" controlId="formBasicName">
+                        <Form.Label>Imię</Form.Label>
+                        <Form.Control ref={nameRef} type="text" defaultValue={userData.name} />
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="formBasicSurname">
+                        <Form.Label>Nazwisko</Form.Label>
+                        <Form.Control ref={surnameRef} type="text" defaultValue={userData.surname} />
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="formBasicSurname">
+                        <Form.Label>Email</Form.Label>
+                        <Form.Control ref={emailRef} type="text" defaultValue={userData.email} />
+                    </Form.Group>
+                    <Button variant="primary" type="submit">
+                        Submit
+                    </Button>
+                </Form>
+            </div>
         </div>
     );
 }

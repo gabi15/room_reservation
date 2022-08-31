@@ -85,8 +85,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
         String email = (String) result.get("email");
         String password = (String) result.get("password");
-        log.info("Mail is {}", email);
-        log.info("Password is {}", password);
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
         return authenticationManager.authenticate(authenticationToken);
     }
@@ -94,9 +92,8 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         User user = (User) authResult.getPrincipal();
-        /* TODO
-         *   move secret to secret place*/
-        Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+        String SECRET_KEY = System.getenv("SECRET_KEY");
+        Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY.getBytes());
 
         String access_token = JWT.create().withSubject(user.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 60 * 1000))

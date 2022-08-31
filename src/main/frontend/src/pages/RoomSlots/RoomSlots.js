@@ -20,7 +20,6 @@ const RoomSlots = () => {
             axios.get(`http://localhost:8080/api/v1/room/${roomName}`, { headers: authHeaderData })
 
                 .then(res => {
-                    console.log(res);
                     setSlotData(prev => ([...prev, ...res.data]))
                 })
                 .catch(e => {
@@ -34,7 +33,7 @@ const RoomSlots = () => {
 
     const getDate = (offset = 0) => {
         let date = new Date();
-        date.setDate(date.getDate()+offset)
+        date.setDate(date.getDate() + offset)
         let dd = String(date.getDate()).padStart(2, '0');
         let mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
         let yyyy = date.getFullYear();
@@ -52,12 +51,9 @@ const RoomSlots = () => {
 
 
     const submitReservation = async (e, startHour, endHour, day) => {
-        console.log('aaa');
         e.preventDefault();
         let startDate = day + " " + startHour + ":00";
         let endDate = day + " " + endHour + ":00";
-        console.log(startDate)
-        console.log(endDate)
 
         const authHeaderData = authHeader() || null;
 
@@ -67,7 +63,6 @@ const RoomSlots = () => {
             endDate: endDate,
         }, { headers: authHeaderData })
             .then(res => {
-                console.log(res);
                 return true;
             })
             .catch(error => {
@@ -83,7 +78,7 @@ const RoomSlots = () => {
 
         return (
             <div className="slots_list">
-                <p>{today}</p>
+                <p className='today'>{today}</p>
                 <ListGroup as="ul">
                     {slotsToDisplay
                         .map((slot, index) => {
@@ -100,7 +95,7 @@ const RoomSlots = () => {
                                                 const isReserved = await submitReservation(e, slot.start, slot.end, today);
                                                 isReserved ? alert("created successfully") : alert("reservation failed");
                                                 setSlotData(prev => prev.map((slot2, index2) => index2 === index ? { ...slot2, reserved: isReserved } : slot2));
-                                                
+
                                             }}
                                         />
                                     </ListGroup.Item >

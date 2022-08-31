@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import './Register.css';
@@ -41,20 +41,17 @@ function Register() {
 
     const isValid = validate(email, password, name, surname);
 
-    if(!isValid){
+    if (!isValid) {
       alert("Nieparwidłowe dane - upewnij się że wypełniłeś wszystkie pola, oraz, że długość hasła jest większa od 4 a mniejsza od 30");
       return;
     }
-    
+
     axios.post("http://localhost:8080/api/v1/user/save", {
       email: email,
       surname: surname,
       name: name,
       password: password
     }).then(res => {
-      console.log(res);
-      // const form = document.getElementById('register_form');
-      // form.reset();
       nav("/login")
     }).catch(error => {
       console.log(error.response.data);

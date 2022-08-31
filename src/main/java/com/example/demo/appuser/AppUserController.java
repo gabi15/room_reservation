@@ -104,8 +104,9 @@ public class AppUserController {
         String authorizationHeader = request.getHeader(AUTHORIZATION);
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             try {
+                String SECRET_KEY = System.getenv("SECRET_KEY");
                 String refresh_token = authorizationHeader.substring("Bearer ".length());
-                Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+                Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY.getBytes());
                 JWTVerifier verifier = JWT.require(algorithm).build();
                 DecodedJWT decodedJWT = verifier.verify(refresh_token);
                 String email = decodedJWT.getSubject();
@@ -146,8 +147,9 @@ public class AppUserController {
     public void updateAppUser(
             @PathVariable("userId") Long id,
             @RequestParam(required = false) String name,
+            @RequestParam(required = false) String surname,
             @RequestParam(required = false) String email) {
-        appUserServiceImpl.updateAppUser(id, name, email);
+        appUserServiceImpl.updateAppUser(id, name, surname, email);
 
     }
 }

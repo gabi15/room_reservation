@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import './AddRoom.css';
@@ -32,12 +32,12 @@ const AddRoom = () => {
         const endTime = endTimeRef.current.value;
         const reservationTimeInMinutes = reservationTimeRef.current.value;
 
-        let isValidRoomName = validateRoomName(roomName) 
+        let isValidRoomName = validateRoomName(roomName)
         let isValidStartEnd = validateStartEnd(startTime, endTime);
         const authHeaderData = authHeader();
 
         if (!isValidRoomName) {
-            alert("Nieparwidłowe dane - upewnij się że wypełniłeś wszystkie pola");
+            alert("Nieparawidłowe dane - upewnij się że wypełniłeś wszystkie pola");
             return;
         }
 
@@ -51,7 +51,7 @@ const AddRoom = () => {
             startTime: startTime,
             endTime: endTime,
             reservationTimeInMinutes: reservationTimeInMinutes
-        }, {headers: authHeaderData}
+        }, { headers: authHeaderData }
         ).then(res => {
             console.log(res);
             alert("Poprawnie dodano nowy pokój")
@@ -65,40 +65,38 @@ const AddRoom = () => {
 
     const options = [];
     let hour;
-    for (let i=6;i<24;i+=1) {
-        hour = ('0' + i.toString()).slice(-2)+':00'
-        options.push(hour)}
+    for (let i = 6; i < 24; i += 1) {
+        hour = ('0' + i.toString()).slice(-2) + ':00'
+        options.push(hour)
+    }
 
     const HourDropdownStart = () => {
         return (
             <Form.Select ref={startTimeRef}>
-            {options.map(option => (
-                <option key={`start_${option}`} value={`${option}:00`} >
-                {option}
-                </option>
-            ))}
+                {options.map(option => (
+                    <option key={`start_${option}`} value={`${option}:00`} >
+                        {option}
+                    </option>
+                ))}
             </Form.Select>
         )
-}
+    }
 
     const HourDropdownEnd = () => {
-
         return (
             <Form.Select ref={endTimeRef}>
-            {options.map(option => (
-                <option key={`end_${option}`} value={`${option}:00`} >
-                {option}
-                </option>
-            ))}
+                {options.map(option => (
+                    <option key={`end_${option}`} value={`${option}:00`} >
+                        {option}
+                    </option>
+                ))}
             </Form.Select>
         )
-}
+    }
 
     return (
         <div className="AddRoom">
             <h1>Dodaj nowy pokój</h1>
-            {}
-
             <div className="form_style">
 
                 <Form id="add_room_form" onSubmit={handleSubmitRoom}>
@@ -108,11 +106,11 @@ const AddRoom = () => {
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="formBasicSurname">
                         <Form.Label>Godzina startu</Form.Label>
-                        {HourDropdownStart()} 
+                        {HourDropdownStart()}
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="formBasicEmail">
                         <Form.Label>Godzina końca</Form.Label>
-                        {HourDropdownEnd()}                           
+                        {HourDropdownEnd()}
 
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="formBasicEmail">

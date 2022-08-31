@@ -8,8 +8,8 @@ class AuthService {
     return JSON.parse(localStorage.getItem('user'));
   }
 
-  getIsAdmin(){
-    if (localStorage.getItem('isAdmin') == "true"){
+  getIsAdmin() {
+    if (localStorage.getItem('isAdmin') == "true") {
       return true;
     }
     return false;

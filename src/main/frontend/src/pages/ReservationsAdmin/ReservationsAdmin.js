@@ -12,6 +12,8 @@ const ReservationsAdmin = () => {
     const [rooms, setRooms] = useState([]);
     const [reservations, setReservations] = useState([]);
     const [selectedRoom, setSelectedRoom] = useState(null);
+    //const [selectedDate, setSelectedDate] = useState(null);
+
 
     const nav = useNavigate();
     const dateRef = useRef();
@@ -21,17 +23,13 @@ const ReservationsAdmin = () => {
         const fetchRooms = () => {
 
             const authHeaderData = authHeader();
-            console.log(authHeaderData);
 
             axios.get("http://localhost:8080/api/v1/rooms/get", { headers: authHeaderData })
                 .then(res => {
                     let roomObjects = res.data
                     let result = roomObjects.map(a => a.name);
-                    console.log(result);
                     setRooms(result);
                     setSelectedRoom(result[0])
-                    console.log(rooms);
-                    // displayedRooms = displayRooms(rooms);
                 })
                 .catch(e => {
                     nav("/login");
@@ -46,12 +44,10 @@ const ReservationsAdmin = () => {
 
         e.preventDefault()
         const authHeaderData = authHeader() || null;
-        console.log(authHeaderData);
 
         axios.get(`http://localhost:8080/api/v1/room_reservations/${selectedRoom}`, { headers: authHeaderData })
 
             .then(res => {
-                console.log(res);
                 setReservations(prev => ([...res.data]))
             })
             .catch(e => {
@@ -74,14 +70,15 @@ const ReservationsAdmin = () => {
                         {rooms.map((room, index) => (
                             <option value={room} key={`${room}_${index}`}> {room} </option>))}
                     </select>
-                    <input id="startDate" className="form-control" type="date" ref={dateRef} />
+                    {/* <input id="startDate" className="form-control" type="date" value={selectedDate}
+                        onChange={e => setSelectedDate(e.target.value)} /> */}
                     <br></br>
                     <Button variant="primary" type="submit">
                         Submit
                     </Button>
                 </Form>
-            <CustomList reservations={reservations} />
-        </div>
+                <CustomList reservations={reservations} />
+            </div>
         </div>
     );
 }

@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { authHeader } from '../../DataService';
 import React, { useState, useEffect, useRef } from 'react';
-import Table from 'react-bootstrap/Table'
 import { useNavigate } from "react-router-dom";
 import ListGroup from 'react-bootstrap/ListGroup'
 import Button from 'react-bootstrap/Button'
@@ -16,15 +15,10 @@ const MyReservations = () => {
     useEffect(() => {
         const fetchMyReservations = () => {
             const authHeaderData = authHeader() || null;
-            if(authHeaderData){
-                return;
-            }
-            console.log(authHeaderData);
 
             axios.get("http://localhost:8080/api/v1/reservations/my_reservations", { headers: authHeaderData })
 
                 .then(res => {
-                    console.log(res);
                     setMyReservations(prev => ([...res.data]))
                 })
                 .catch(e => {
@@ -48,7 +42,7 @@ const MyReservations = () => {
                             let startString = getDateFromString(startDate) + ' ' + getTimeFromString(startDate) + ' - ' + getTimeFromString(endDate)
                             return (
                                 <ListGroup.Item key={`${slot.startDate}_${slot.endDate}_${slot.room.name}`} action variant="primary">
-                                    <b>{slot.room.name}</b> <br></br> {startString}  
+                                    <b>{slot.room.name}</b> <br></br> {startString}
                                     <Button as="input"
                                         id={`button_${index}`}
                                         type="button"
@@ -75,13 +69,11 @@ const MyReservations = () => {
 
         const authHeaderData = authHeader() || null;
         document.getElementById(`button_${index}`).disabled = true;
-        console.log(authHeaderData);
 
         return axios.delete(`http://localhost:8080/api/v1/reservations/${slot.id}`, {
             headers: authHeaderData,
         })
             .then(res => {
-                console.log(res);
                 return true;
             })
             .catch(error => {

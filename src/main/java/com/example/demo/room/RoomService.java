@@ -101,6 +101,7 @@ public class RoomService {
         Room room = getRoomByName(roomName);
         return room.getReservationList();
     }
+    
 
     public boolean isSlotReserved(List<Reservation> reservations , Timestamp startDate, Timestamp endDate, Timestamp now){
         Stream<Reservation> stream = reservations.stream();
