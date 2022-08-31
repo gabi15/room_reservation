@@ -34,4 +34,3 @@ build/
 
 .jpb
 .mvn
-src/main/resources/application.properties
